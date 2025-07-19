@@ -1,7 +1,7 @@
 package ping
 
 import (
-	dicontainer "go-skeleton/internal/common/di"
+	dicontainer "go-skeleton/internal/common/container"
 	pingrepo "go-skeleton/internal/ping/adapter/ping_repo"
 	restHandl "go-skeleton/internal/ping/adapter/rest"
 	"go-skeleton/internal/ping/core/port"

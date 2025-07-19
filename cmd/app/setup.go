@@ -2,7 +2,7 @@ package app
 
 import (
 	"go-skeleton/config"
-	dicontainer "go-skeleton/internal/common/di"
+	dicontainer "go-skeleton/internal/common/container"
 	"go-skeleton/internal/ping"
 	"go-skeleton/pkg/cache"
 	"go-skeleton/pkg/database"
