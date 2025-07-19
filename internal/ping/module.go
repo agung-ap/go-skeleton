@@ -18,7 +18,7 @@ type Module struct {
 
 func NewModule(container dicontainer.Container) Module {
 	// Inject database container to repository
-	pingRepo := pingrepo.CreateEnhancedRepository(container.DB)
+	pingRepo := pingrepo.CreateEnhancedRepository(container.DB, container.Cache)
 
 	// Create service context to group repositories
 	serviceCtx := port.NewServiceContext(pingRepo)
