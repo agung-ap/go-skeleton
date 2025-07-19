@@ -1,0 +1,41 @@
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+
+# Go build artifacts
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Go profiling files
+*.prof
+*.pprof
+
+# Go debug files
+debug
+
+# Project Ignore
+application.yml
+test.yml
+/out
+.vscode
+*.rdb
+vendor
+test.http
+test-client.go
+create_db.sql
+create_test_db.sql
+application.yml
+test.yml
+
+test/
+.cursor/
+.idea/
+tmp/
+tools/
+tmp/
+bin/

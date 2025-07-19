@@ -1,0 +1,53 @@
+version: '3'
+services:
+  app_test:
+    container_name: go-skeleton-test
+    build:
+      context: .
+      dockerfile: ./Dockerfile.test
+    ports: 
+      - 8080:8080
+    restart: on-failure
+    volumes:
+      - api_test:/usr/src/app/
+    depends_on:
+      - fullstack-redis-test
+      - postgres-test
+    networks:
+      - fullstack-test
+
+  fullstack-redis-test:
+    image: redis:alpine
+    ports:
+      - 6379:6379
+    container_name: redis-db-test
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    networks:
+      - fullstack-test
+  
+  postgres-test:
+    container_name: postgres-db-test
+    image: postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      PGDATA: /data/postgres
+      POSTGRES_HOST_AUTH_METHOD:
+    volumes:
+      - ./create_test_db.sql:/docker-entrypoint-initdb.d/create_test_db.sql
+      - postgres_test:/data/postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - fullstack-test
+    restart: unless-stopped
+
+volumes:
+  api_test:
+  postgres_test:
+
+# Networks to be created to facilitate communication between containers
+networks:
+  fullstack-test:
+    driver: bridge
