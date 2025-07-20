@@ -33,22 +33,6 @@ func main() {
 		{
 			Name:  "migrate",
 			Usage: "run db migrations",
-			Action: func(_ *cli.Context) error {
-				logger.Info("Running database migrations")
-				migration, err := database.InitMigration(config.Database)
-				if err != nil {
-					logger.Error("Failed to initialize migration", zap.Error(err))
-					return err
-				}
-
-				err = migration.ApplyMigrations()
-				if err != nil {
-					logger.Error("Failed to apply migrations", zap.Error(err))
-				} else {
-					logger.Info("Migrations applied successfully")
-				}
-				return err
-			},
 			Subcommands: []*cli.Command{
 				{
 					Name:  "create",
@@ -72,11 +56,6 @@ func main() {
 						}
 
 						err = migration.CreateMigration(migrationName)
-						if err != nil {
-							logger.Error("Failed to create migration", zap.Error(err))
-						} else {
-							logger.Info("Migration created successfully", zap.String("name", migrationName))
-						}
 						return err
 					},
 				},

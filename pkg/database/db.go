@@ -41,6 +41,15 @@ func CloseDB() {
 	}
 }
 
+func CloseMigrationDB() {
+	if MigrationDB != nil && MigrationDB.DB != nil {
+		if err := MigrationDB.DB.Close(); err != nil {
+			logger.Error("failed to close migration database connection", zap.Error(err))
+		}
+		MigrationDB = nil
+	}
+}
+
 func InitMigration(cfg config.DatabaseConfig) (*MigrationManager, error) {
 	// Create a separate database connection specifically for migrations
 	// Build connection string for PostgreSQL
@@ -59,17 +68,9 @@ func InitMigration(cfg config.DatabaseConfig) (*MigrationManager, error) {
 
 	MigrationDB = db
 
-	// Ensure migration connection is closed after migrations
-	defer func() {
-		if MigrationDB.DB != nil {
-			_ = MigrationDB.DB.Close()
-		}
-	}()
-
 	// Create a migration manager with the separate connection
 	migrationsDir := "migrations"
 	migrationManager := NewMigrationManager(migrationsDir)
 
-	// Apply all migrations using the separate connection
 	return migrationManager, nil
 }

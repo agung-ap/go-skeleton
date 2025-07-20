@@ -90,6 +90,9 @@ func (mm *MigrationManager) ApplyMigrations() error {
 		fmt.Printf("Warning: failed to close migration instance: source=%v, db=%v\n", sourceErr, dbErr)
 	}
 
+	// Close the migration database connection
+	CloseMigrationDB()
+
 	fmt.Println("Migrations applied successfully")
 	return nil
 }
@@ -106,6 +109,9 @@ func (mm *MigrationManager) ApplyMigrationsSteps(steps int) error {
 	if err := m.Steps(steps); err != nil && !errors.Is(err, migrate.ErrNoChange) {
 		return fmt.Errorf("failed to apply %d migrations: %w", steps, err)
 	}
+
+	// Close the migration database connection
+	CloseMigrationDB()
 
 	fmt.Printf("Applied %d migrations successfully\n", steps)
 	return nil
@@ -130,6 +136,9 @@ func (mm *MigrationManager) RollbackMigrationsSteps(steps int) error {
 		return fmt.Errorf("failed to roll back %d migrations: %w", steps, err)
 	}
 
+	// Close the migration database connection
+	CloseMigrationDB()
+
 	fmt.Printf("Rolled back %d migrations successfully\n", steps)
 	return nil
 }
@@ -148,6 +157,9 @@ func (mm *MigrationManager) RollbackAllMigrations() error {
 		return fmt.Errorf("failed to roll back all migrations: %w", err)
 	}
 
+	// Close the migration database connection
+	CloseMigrationDB()
+
 	fmt.Println("All migrations rolled back successfully")
 	return nil
 }
@@ -165,6 +177,9 @@ func (mm *MigrationManager) MigrateTo(version uint) error {
 	if err := m.Migrate(version); err != nil && !errors.Is(err, migrate.ErrNoChange) {
 		return fmt.Errorf("failed to migrate to version %d: %w", version, err)
 	}
+
+	// Close the migration database connection
+	CloseMigrationDB()
 
 	fmt.Printf("Migrated to version %d successfully\n", version)
 	return nil

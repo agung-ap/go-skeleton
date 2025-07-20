@@ -8,6 +8,7 @@ import (
 
 type DatabaseConfig struct {
 	DriverName            string
+	Name                  string
 	Host                  string
 	User                  string
 	Password              string
@@ -25,6 +26,7 @@ var Database DatabaseConfig
 func initDatabaseConfig() {
 	Database = DatabaseConfig{
 		DriverName:            mustGetString("DB_DRIVER"),
+		Name:                  mustGetString("DB_NAME"),
 		Host:                  mustGetString("DB_HOST"),
 		User:                  mustGetString("DB_USER"),
 		Password:              mustGetString("DB_PASSWORD"),
@@ -43,6 +45,6 @@ func (dc DatabaseConfig) ConnectionURL() string {
 		url.QueryEscape(dc.Password),
 		dc.Host,
 		dc.Port,
-		dc.DriverName,
+		dc.Name,
 	)
 }

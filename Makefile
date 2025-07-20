@@ -24,20 +24,14 @@ test-coverage:
 
 # Database commands
 migrate-up:
-	go run main.go migrate up --all
+	go run main.go migrate up
 
 migrate-down:
 	go run main.go migrate down
 
-migrate-down-all:
-	go run main.go migrate down --all
-
 migrate-create:
 	@if [ -z "$(name)" ]; then echo "Usage: make migrate-create name=migration_name"; exit 1; fi
 	go run main.go migrate create --name=$(name)
-
-migrate-version:
-	go run main.go migrate version
 
 # Legacy migrate command (for backward compatibility)
 migrate: migrate-up
