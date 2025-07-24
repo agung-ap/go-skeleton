@@ -1,6 +1,9 @@
 package service
 
-import "go-skeleton/internal/ping/core/port"
+import (
+	"go-skeleton/internal/ping/core/domain"
+	"go-skeleton/internal/ping/core/port"
+)
 
 // PingService implements business logic with repository access through context
 type PingService struct {
@@ -15,6 +18,6 @@ func NewPingService(svcCtx port.SvcContext) PingService {
 }
 
 // Ping returns a ping response through the service context
-func (s PingService) Ping() string {
+func (s PingService) Ping() domain.Ping {
 	return s.svcCtx.Repo.Ping()
 }

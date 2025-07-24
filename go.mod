@@ -16,11 +16,6 @@ require (
 )
 
 require (
-	github.com/mattn/go-colorable v0.1.13 // indirect
-	github.com/rs/zerolog v1.34.0 // indirect
-)
-
-require (
 	github.com/bytedance/sonic v1.11.6 // indirect
 	github.com/bytedance/sonic/loader v0.1.1 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect

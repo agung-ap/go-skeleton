@@ -4,7 +4,7 @@ import (
 	pingrepo "go-skeleton/internal/ping/adapter/ping_repo"
 )
 
-// Context holds all repository dependencies for the service layer
+// SvcContext holds all repository dependencies for the service layer
 type SvcContext struct {
 	Repo pingrepo.PingRepository
 }

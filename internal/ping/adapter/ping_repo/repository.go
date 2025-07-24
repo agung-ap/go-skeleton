@@ -1,6 +1,7 @@
 package pingrepo
 
 import (
+	"go-skeleton/internal/ping/core/domain"
 	"go-skeleton/pkg/logger"
 
 	"github.com/go-redis/redis/v8"
@@ -12,14 +13,14 @@ type PingRepository struct {
 	cache *redis.Client
 }
 
-func CreateEnhancedRepository(db *sqlx.DB, cache *redis.Client) PingRepository {
+func NewPingRepository(db *sqlx.DB, cache *redis.Client) PingRepository {
 	return PingRepository{
 		db:    db,
 		cache: cache,
 	}
 }
 
-func (r PingRepository) Ping() string {
+func (r PingRepository) Ping() domain.Ping {
 	if r.db != nil {
 		logger.Info("Pinging database repository")
 	}
@@ -28,5 +29,9 @@ func (r PingRepository) Ping() string {
 		logger.Info("Pinging cache repository")
 	}
 
-	return "pong from repository"
+	result := PingResponse{
+		Message: "ping from repository",
+	}
+
+	return result.ToDomain()
 }
