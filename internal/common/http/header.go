@@ -10,7 +10,7 @@ const (
 	// encoding in HTTP/2.  A request or response containing uppercase
 	// header field names MUST be treated as malformed (Section 8.1.2.6).
 
-	// HTTP Header Standard
+	// HeaderRequestID HTTP Header Standard
 	HeaderRequestID              Header = `x-request-id`
 	HeaderAPIKey                 Header = `x-api-key`
 	HeaderContentType            Header = `content-type`
@@ -29,12 +29,12 @@ const (
 	HeaderXForwardedServerHeader Header = `x-forwarded-server-header`
 	HeaderXForwardedServerPort   Header = `x-forwarded-server-port`
 
-	// Custom HTTP Header
+	// HeaderAppLang Custom HTTP Header
 	HeaderAppLang       Header = `x-app-lang`
 	HeaderAppDebug      Header = `x-app-debug`
 	HeaderCreationSteps Header = `x-create-step`
 
-	// Lang Header
+	// HeaderLangEN Lang Header
 	HeaderLangEN Header = `en`
 	HeaderLangID Header = `id` // #nosec G101 -- This is a header name, not a credential
 )

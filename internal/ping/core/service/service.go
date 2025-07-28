@@ -1,6 +1,7 @@
 package service
 
 import (
+	"context"
 	"go-skeleton/internal/ping/core/domain"
 	"go-skeleton/internal/ping/core/port"
 )
@@ -18,6 +19,6 @@ func NewPingService(svcCtx port.SvcContext) PingService {
 }
 
 // Ping returns a ping response through the service context
-func (s PingService) Ping() domain.Ping {
-	return s.svcCtx.Repo.Ping()
+func (s PingService) Ping(ctx context.Context, resp *domain.Ping) error {
+	return s.svcCtx.Repo.Ping(ctx, resp)
 }

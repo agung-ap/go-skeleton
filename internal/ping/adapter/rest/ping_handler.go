@@ -2,6 +2,7 @@ package rest
 
 import (
 	httpcommon "go-skeleton/internal/common/http"
+	"go-skeleton/internal/ping/core/domain"
 	"go-skeleton/internal/ping/core/service"
 	"go-skeleton/pkg/logger"
 	"net/http"
@@ -28,6 +29,12 @@ func (h *PingHandler) Ping(c *gin.Context) {
 		zap.String("user_agent", c.Request.UserAgent()),
 	)
 
-	result := h.PingService.Ping()
-	httpcommon.ResponseSuccess(c, http.StatusOK, result.Message, nil, nil)
+	var resp domain.Ping
+	err := h.PingService.Ping(c, &resp)
+	if err != nil {
+		httpcommon.ResponseError(c, err)
+		return
+	}
+
+	httpcommon.ResponseSuccess(c, http.StatusOK, "success", resp, nil)
 }

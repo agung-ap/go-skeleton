@@ -1,7 +1,7 @@
 package ping
 
 import (
-	dicontainer "go-skeleton/internal/common/container"
+	"go-skeleton/container"
 	pingrepo "go-skeleton/internal/ping/adapter/ping_repo"
 	restHandl "go-skeleton/internal/ping/adapter/rest"
 	"go-skeleton/internal/ping/core/port"
@@ -16,7 +16,7 @@ type Module struct {
 	Router      restHandl.Router
 }
 
-func NewModule(container dicontainer.Container) Module {
+func NewModule(container container.Container) Module {
 	// Inject database container to repository
 	pingRepo := pingrepo.NewPingRepository(container.DB, container.Cache)
 
