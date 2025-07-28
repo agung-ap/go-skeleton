@@ -32,10 +32,11 @@ create_test_db.sql
 application.yml
 test.yml
 
-test/
+coverage/
 .cursor/
 .idea/
 tmp/
 tools/
 tmp/
 bin/
+test/

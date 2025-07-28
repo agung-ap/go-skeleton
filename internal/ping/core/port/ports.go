@@ -1,22 +1,18 @@
 package port
 
 import (
-	"context"
-	"go-skeleton/internal/ping/core/domain"
+	pingrepo "go-skeleton/internal/ping/adapter/ping_repo"
 )
 
-// PingRepository defines the contract for ping repository operations
-type PingRepository interface {
-	Ping(ctx context.Context, resp *domain.Ping) error
-}
+type PingRepository = pingrepo.PingRepository
 
 // SvcContext holds all repository dependencies for the service layer
 type SvcContext struct {
-	Repo PingRepository
+	Repo *PingRepository
 }
 
 func NewServiceContext(
-	pingRepository PingRepository,
+	pingRepository *pingrepo.PingRepository,
 ) SvcContext {
 	return SvcContext{
 		Repo: pingRepository,

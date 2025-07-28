@@ -1,10 +1,9 @@
-package service
+package service_test
 
 import (
 	"context"
 	"errors"
 	"go-skeleton/internal/ping/core/domain"
-	"go-skeleton/internal/ping/core/port"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -12,6 +11,11 @@ import (
 )
 
 // Test interface - only exists in test package
+type PingRepositoryInterface interface {
+	Ping(ctx context.Context, resp *domain.Ping) error
+}
+
+// Test mock - only exists in test package
 type MockPingRepository struct {
 	mock.Mock
 }
@@ -27,6 +31,32 @@ func (m *MockPingRepository) Ping(ctx context.Context, resp *domain.Ping) error 
 	return nil
 }
 
+// Test wrapper for SvcContext that accepts interface
+type TestSvcContext struct {
+	Repo PingRepositoryInterface
+}
+
+func NewTestServiceContext(repo PingRepositoryInterface) TestSvcContext {
+	return TestSvcContext{
+		Repo: repo,
+	}
+}
+
+// Test service that uses the test interface
+type TestPingService struct {
+	svcCtx TestSvcContext
+}
+
+func NewTestPingService(svcCtx TestSvcContext) *TestPingService {
+	return &TestPingService{
+		svcCtx: svcCtx,
+	}
+}
+
+func (s *TestPingService) Ping(ctx context.Context, resp *domain.Ping) error {
+	return s.svcCtx.Repo.Ping(ctx, resp)
+}
+
 func TestPingService_Ping_Success(t *testing.T) {
 	// Arrange
 	ctx := context.Background()
@@ -35,9 +65,9 @@ func TestPingService_Ping_Success(t *testing.T) {
 	// Set up mock expectations
 	mockRepo.On("Ping", mock.Anything, mock.AnythingOfType("*domain.Ping")).Return(nil).Once()
 
-	// Create service context with mock repository
-	svcCtx := port.NewServiceContext(mockRepo)
-	service := NewPingService(svcCtx)
+	// Create test service context with mock repository
+	svcCtx := NewTestServiceContext(mockRepo)
+	service := NewTestPingService(svcCtx)
 
 	var result domain.Ping
 
@@ -59,9 +89,9 @@ func TestPingService_Ping_RepositoryError(t *testing.T) {
 	// Set up mock expectations
 	mockRepo.On("Ping", mock.Anything, mock.AnythingOfType("*domain.Ping")).Return(expectedError).Once()
 
-	// Create service context with mock repository
-	svcCtx := port.NewServiceContext(mockRepo)
-	service := NewPingService(svcCtx)
+	// Create test service context with mock repository
+	svcCtx := NewTestServiceContext(mockRepo)
+	service := NewTestPingService(svcCtx)
 
 	var result domain.Ping
 
@@ -77,10 +107,10 @@ func TestPingService_Ping_RepositoryError(t *testing.T) {
 func TestNewPingService(t *testing.T) {
 	// Arrange
 	mockRepo := new(MockPingRepository)
-	svcCtx := port.NewServiceContext(mockRepo)
+	svcCtx := NewTestServiceContext(mockRepo)
 
 	// Act
-	service := NewPingService(svcCtx)
+	service := NewTestPingService(svcCtx)
 
 	// Assert
 	assert.NotNil(t, service)

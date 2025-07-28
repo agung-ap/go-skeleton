@@ -36,5 +36,9 @@ func (h *PingHandler) Ping(c *gin.Context) {
 		return
 	}
 
-	httpcommon.ResponseSuccess(c, http.StatusOK, "success", resp, nil)
+	response := PingResponse{
+		PingMessage: resp.Message,
+	}
+
+	httpcommon.ResponseSuccess(c, http.StatusOK, "success", response, nil)
 }

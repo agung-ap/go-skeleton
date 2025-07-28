@@ -21,7 +21,7 @@ func NewModule(container container.Container) Module {
 	pingRepo := pingrepo.NewPingRepository(container.DB, container.Cache)
 
 	// Create service context to group repositories
-	serviceCtx := port.NewServiceContext(pingRepo)
+	serviceCtx := port.NewServiceContext(&pingRepo)
 
 	// Create service with injected context
 	svc := service.NewPingService(serviceCtx)

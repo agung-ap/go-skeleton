@@ -22,7 +22,7 @@ func NewPingRepository(db *sqlx.DB, cache *redis.Client) PingRepository {
 	}
 }
 
-func (r PingRepository) Ping(ctx context.Context, resp *domain.Ping) error {
+func (r *PingRepository) Ping(ctx context.Context, resp *domain.Ping) error {
 	if r.db != nil {
 		err := r.db.PingContext(ctx)
 		if err != nil {

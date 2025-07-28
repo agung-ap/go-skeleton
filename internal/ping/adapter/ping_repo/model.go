@@ -6,7 +6,7 @@ type PingResponse struct {
 	Message string
 }
 
-func (r PingResponse) ToDomain() domain.Ping {
+func (r *PingResponse) ToDomain() domain.Ping {
 	return domain.Ping{
 		Message: r.Message,
 	}

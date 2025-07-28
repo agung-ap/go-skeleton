@@ -19,6 +19,6 @@ func NewPingService(svcCtx port.SvcContext) PingService {
 }
 
 // Ping returns a ping response through the service context
-func (s PingService) Ping(ctx context.Context, resp *domain.Ping) error {
+func (s *PingService) Ping(ctx context.Context, resp *domain.Ping) error {
 	return s.svcCtx.Repo.Ping(ctx, resp)
 }
