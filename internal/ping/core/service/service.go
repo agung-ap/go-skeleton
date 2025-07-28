@@ -8,12 +8,12 @@ import (
 
 // PingService implements business logic with repository access through context
 type PingService struct {
-	svcCtx port.SvcContext
+	svcCtx *port.SvcContext
 }
 
 // NewPingService creates a service with injected service context
-func NewPingService(svcCtx port.SvcContext) PingService {
-	return PingService{
+func NewPingService(svcCtx *port.SvcContext) *PingService {
+	return &PingService{
 		svcCtx: svcCtx,
 	}
 }

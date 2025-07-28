@@ -15,8 +15,8 @@ type PingRepository struct {
 	cache *redis.Client
 }
 
-func NewPingRepository(db *sqlx.DB, cache *redis.Client) PingRepository {
-	return PingRepository{
+func NewPingRepository(db *sqlx.DB, cache *redis.Client) *PingRepository {
+	return &PingRepository{
 		db:    db,
 		cache: cache,
 	}

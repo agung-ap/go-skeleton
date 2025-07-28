@@ -5,16 +5,16 @@ import (
 )
 
 type Router struct {
-	handler PingHandler
+	handler *PingHandler
 }
 
-func NewRouter(handler PingHandler) Router {
-	return Router{
+func NewRouter(handler *PingHandler) *Router {
+	return &Router{
 		handler: handler,
 	}
 }
 
 // RegisterPingRoutes registers ping-specific routes to the provided router
-func (r Router) RegisterPingRoutes(router *gin.Engine) {
+func (r *Router) RegisterPingRoutes(router *gin.Engine) {
 	router.GET("/ping", r.handler.Ping)
 }

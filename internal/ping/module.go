@@ -11,17 +11,17 @@ import (
 )
 
 type Module struct {
-	Service     service.PingService
-	RestHandler restHandl.PingHandler
-	Router      restHandl.Router
+	Service     *service.PingService
+	RestHandler *restHandl.PingHandler
+	Router      *restHandl.Router
 }
 
-func NewModule(container container.Container) Module {
+func NewModule(container container.Container) *Module {
 	// Inject database container to repository
 	pingRepo := pingrepo.NewPingRepository(container.DB, container.Cache)
 
 	// Create service context to group repositories
-	serviceCtx := port.NewServiceContext(&pingRepo)
+	serviceCtx := port.NewServiceContext(pingRepo)
 
 	// Create service with injected context
 	svc := service.NewPingService(serviceCtx)
@@ -30,7 +30,7 @@ func NewModule(container container.Container) Module {
 	restHandler := restHandl.NewPingHandler(svc)
 	router := restHandl.NewRouter(restHandler)
 
-	return Module{
+	return &Module{
 		Service:     svc,
 		RestHandler: restHandler,
 		Router:      router,
@@ -38,6 +38,6 @@ func NewModule(container container.Container) Module {
 }
 
 // RegisterRoutes registers all ping routes to the provided router
-func (m Module) RegisterRoutes(router *gin.Engine) {
+func (m *Module) RegisterRoutes(router *gin.Engine) {
 	m.Router.RegisterPingRoutes(router)
 }

@@ -12,13 +12,13 @@ import (
 )
 
 type PingHandler struct {
-	PingService service.PingService
+	PingService *service.PingService
 }
 
 func NewPingHandler(
-	pingService service.PingService,
-) PingHandler {
-	return PingHandler{
+	pingService *service.PingService,
+) *PingHandler {
+	return &PingHandler{
 		PingService: pingService,
 	}
 }
