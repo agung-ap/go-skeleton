@@ -1,0 +1,1905 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>app: Go Coverage Report</title>
+		<style>
+			body {
+				background: black;
+				color: rgb(80, 80, 80);
+			}
+			body, pre, #legend span {
+				font-family: Menlo, monospace;
+				font-weight: bold;
+			}
+			#topbar {
+				background: black;
+				position: fixed;
+				top: 0; left: 0; right: 0;
+				height: 42px;
+				border-bottom: 1px solid rgb(80, 80, 80);
+			}
+			#content {
+				margin-top: 50px;
+			}
+			#nav, #legend {
+				float: left;
+				margin-left: 10px;
+			}
+			#legend {
+				margin-top: 12px;
+			}
+			#nav {
+				margin-top: 10px;
+			}
+			#legend span {
+				margin: 0 5px;
+			}
+			.cov0 { color: rgb(192, 0, 0) }
+.cov1 { color: rgb(128, 128, 128) }
+.cov2 { color: rgb(116, 140, 131) }
+.cov3 { color: rgb(104, 152, 134) }
+.cov4 { color: rgb(92, 164, 137) }
+.cov5 { color: rgb(80, 176, 140) }
+.cov6 { color: rgb(68, 188, 143) }
+.cov7 { color: rgb(56, 200, 146) }
+.cov8 { color: rgb(44, 212, 149) }
+.cov9 { color: rgb(32, 224, 152) }
+.cov10 { color: rgb(20, 236, 155) }
+
+		</style>
+	</head>
+	<body>
+		<div id="topbar">
+			<div id="nav">
+				<select id="files">
+				
+				<option value="file0">go-skeleton/cmd/app/router.go (0.0%)</option>
+				
+				<option value="file1">go-skeleton/cmd/app/server.go (0.0%)</option>
+				
+				<option value="file2">go-skeleton/cmd/app/setup.go (0.0%)</option>
+				
+				<option value="file3">go-skeleton/cmd/serve.go (0.0%)</option>
+				
+				<option value="file4">go-skeleton/config/app.go (100.0%)</option>
+				
+				<option value="file5">go-skeleton/config/cache.go (100.0%)</option>
+				
+				<option value="file6">go-skeleton/config/config.go (100.0%)</option>
+				
+				<option value="file7">go-skeleton/config/db.go (100.0%)</option>
+				
+				<option value="file8">go-skeleton/config/key.go (95.7%)</option>
+				
+				<option value="file9">go-skeleton/config/logger.go (100.0%)</option>
+				
+				<option value="file10">go-skeleton/config/server.go (100.0%)</option>
+				
+				<option value="file11">go-skeleton/container/container.go (100.0%)</option>
+				
+				<option value="file12">go-skeleton/internal/common/http/header.go (0.0%)</option>
+				
+				<option value="file13">go-skeleton/internal/common/http/response.go (0.0%)</option>
+				
+				<option value="file14">go-skeleton/internal/ping/adapter/ping_repo/model.go (100.0%)</option>
+				
+				<option value="file15">go-skeleton/internal/ping/adapter/ping_repo/repository.go (42.9%)</option>
+				
+				<option value="file16">go-skeleton/internal/ping/adapter/rest/ping_handler.go (0.0%)</option>
+				
+				<option value="file17">go-skeleton/internal/ping/adapter/rest/router.go (0.0%)</option>
+				
+				<option value="file18">go-skeleton/internal/ping/core/port/ports.go (100.0%)</option>
+				
+				<option value="file19">go-skeleton/internal/ping/core/service/service.go (100.0%)</option>
+				
+				<option value="file20">go-skeleton/internal/ping/module.go (0.0%)</option>
+				
+				<option value="file21">go-skeleton/main.go (0.0%)</option>
+				
+				<option value="file22">go-skeleton/pkg/cache/cache.go (0.0%)</option>
+				
+				<option value="file23">go-skeleton/pkg/database/db.go (0.0%)</option>
+				
+				<option value="file24">go-skeleton/pkg/database/migration.go (0.0%)</option>
+				
+				<option value="file25">go-skeleton/pkg/errors/errors.go (30.6%)</option>
+				
+				<option value="file26">go-skeleton/pkg/logger/logger.go (0.0%)</option>
+				
+				<option value="file27">go-skeleton/pkg/logger/middleware.go (0.0%)</option>
+				
+				</select>
+			</div>
+			<div id="legend">
+				<span>not tracked</span>
+			
+				<span class="cov0">no coverage</span>
+				<span class="cov1">low coverage</span>
+				<span class="cov2">*</span>
+				<span class="cov3">*</span>
+				<span class="cov4">*</span>
+				<span class="cov5">*</span>
+				<span class="cov6">*</span>
+				<span class="cov7">*</span>
+				<span class="cov8">*</span>
+				<span class="cov9">*</span>
+				<span class="cov10">high coverage</span>
+			
+			</div>
+		</div>
+		<div id="content">
+		
+		<pre class="file" id="file0" style="display: none">package app
+
+import (
+        "go-skeleton/config"
+        "go-skeleton/pkg/logger"
+
+        "github.com/gin-gonic/gin"
+)
+
+// NewGlobalRouter creates and configures the global router with middleware and common settings
+func NewGlobalRouter() *gin.Engine <span class="cov0" title="0">{
+        // Set Gin mode based on log level for better performance in production
+        if config.Logger.Level == "debug" || config.Logger.Development </span><span class="cov0" title="0">{
+                gin.SetMode(gin.DebugMode)
+        }</span> else<span class="cov0" title="0"> {
+                gin.SetMode(gin.ReleaseMode)
+        }</span>
+
+        <span class="cov0" title="0">router := gin.New()
+
+        // Add global middleware
+        router.Use(gin.Recovery())             // Equivalent to Chi's Recoverer
+        router.Use(logger.LoggingMiddleware()) // Our custom logging middleware
+
+        // Static file serving for docs
+        router.Static("/docs", config.App.DocsPath)
+
+        return router</span>
+}
+</pre>
+		
+		<pre class="file" id="file1" style="display: none">package app
+
+import (
+        "context"
+        "go-skeleton/config"
+        "go-skeleton/pkg/logger"
+        "net/http"
+        "os"
+        "os/signal"
+        "strconv"
+        "syscall"
+
+        "go.uber.org/zap"
+)
+
+type Server struct {
+        server *http.Server
+}
+
+func New() *Server <span class="cov0" title="0">{
+        handler := SetupRouter()
+
+        server := &amp;Server{
+                server: &amp;http.Server{
+                        Addr:         ":" + strconv.Itoa(config.Server.Port),
+                        Handler:      handler,
+                        ReadTimeout:  config.Server.ReadTimeout,
+                        WriteTimeout: config.Server.WriteTimeout,
+                },
+        }
+
+        logger.Info("Server created",
+                zap.String("addr", server.server.Addr),
+                zap.Duration("read_timeout", config.Server.ReadTimeout),
+                zap.Duration("write_timeout", config.Server.WriteTimeout),
+        )
+
+        return server
+}</span>
+
+func (s *Server) Start(ctx context.Context, cancel context.CancelFunc) <span class="cov0" title="0">{
+        go s.waitForShutDown(ctx, cancel)
+
+        logger.Info("Starting HTTP server", zap.String("addr", s.server.Addr))
+
+        go func() </span><span class="cov0" title="0">{
+                err := s.server.ListenAndServe()
+                if err != nil &amp;&amp; err != http.ErrServerClosed </span><span class="cov0" title="0">{
+                        logger.Error("Server error", zap.Error(err))
+                        cancel()
+                }</span>
+        }()
+}
+
+func (s *Server) waitForShutDown(ctx context.Context, cancel context.CancelFunc) <span class="cov0" title="0">{
+        stop := make(chan os.Signal, 1)
+        signal.Notify(stop, os.Interrupt, syscall.SIGTERM, syscall.SIGINT)
+
+        &lt;-stop
+        logger.Info("Shutdown signal received, stopping server gracefully...")
+
+        if err := s.server.Shutdown(ctx); err != nil </span><span class="cov0" title="0">{
+                logger.Error("Server shutdown error", zap.Error(err))
+        }</span>
+
+        <span class="cov0" title="0">logger.Info("Server stopped")
+        cancel()</span> // call the cancelFunc to close the shared interrupt channel between REST and gRPC and shutdown both servers
+}
+</pre>
+		
+		<pre class="file" id="file2" style="display: none">package app
+
+import (
+        "go-skeleton/config"
+        container2 "go-skeleton/container"
+        "go-skeleton/internal/ping"
+        "go-skeleton/pkg/cache"
+        "go-skeleton/pkg/database"
+        "go-skeleton/pkg/logger"
+
+        "github.com/gin-gonic/gin"
+)
+
+var container container2.Container
+
+func Init() <span class="cov0" title="0">{
+        config.Init()
+        logger.Init(config.Logger)
+        database.Init(config.Database)
+        cache.Init(config.RedisCache)
+
+        // Initialize dependency injection container
+        container = container2.NewContainer()
+}</span>
+
+func SetupRouter() *gin.Engine <span class="cov0" title="0">{
+        // Create global router with middleware and common settings
+        router := NewGlobalRouter()
+
+        // Initialize modules with dependency injection
+        pingModule := ping.NewModule(container)
+
+        // Register module routes
+        pingModule.RegisterRoutes(router)
+
+        return router
+}</span>
+
+func ShutDown() <span class="cov0" title="0">{
+        logger.Sync() // Flush any buffered logs
+        database.CloseDB()
+        cache.CloseCache()
+}</span>
+</pre>
+		
+		<pre class="file" id="file3" style="display: none">package cmd
+
+import (
+        "context"
+        "go-skeleton/cmd/app"
+)
+
+func StartServer(c context.Context) <span class="cov0" title="0">{
+        ctx, cancel := context.WithCancel(c)
+
+        startServer(ctx, cancel)
+
+        &lt;-ctx.Done()
+}</span>
+
+func startServer(ctx context.Context, cancel context.CancelFunc) <span class="cov0" title="0">{
+        s := app.New()
+        s.Start(ctx, cancel)
+}</span>
+</pre>
+		
+		<pre class="file" id="file4" style="display: none">package config
+
+type AppConfig struct {
+        DocsPath string
+}
+
+var App AppConfig
+
+func initAppConfig() <span class="cov8" title="1">{
+        App.DocsPath = mustGetString("DOCS_PATH")
+}</span>
+</pre>
+		
+		<pre class="file" id="file5" style="display: none">package config
+
+import (
+        "time"
+)
+
+type CacheConfig struct {
+        Host         string
+        Port         int
+        PoolSize     int
+        DialTimeout  time.Duration
+        ReadTimeout  time.Duration
+        WriteTimeout time.Duration
+        IdleTimeout  time.Duration
+}
+
+var RedisCache CacheConfig
+
+func initCacheConfig() <span class="cov8" title="1">{
+        RedisCache = CacheConfig{
+                Host:         mustGetString("REDIS_HOST"),
+                Port:         mustGetInt("REDIS_PORT"),
+                PoolSize:     mustGetInt("REDIS_POOL_SIZE"),
+                DialTimeout:  mustGetDurationMs("REDIS_DIAL_TIMEOUT"),
+                ReadTimeout:  mustGetDurationMs("REDIS_READ_TIMEOUT"),
+                WriteTimeout: mustGetDurationMs("REDIS_WRITE_TIMEOUT"),
+                IdleTimeout:  mustGetDurationMs("REDIS_IDLE_TIMEOUT"),
+        }
+}</span>
+</pre>
+		
+		<pre class="file" id="file6" style="display: none">package config
+
+import (
+        "os"
+
+        "github.com/spf13/viper"
+)
+
+var ConfigLoadedForTest bool
+
+func Init() <span class="cov6" title="2">{
+        if os.Getenv("ENVIRONMENT") == "test" </span><span class="cov1" title="1">{
+                viper.SetConfigName("test")
+        }</span> else<span class="cov1" title="1"> {
+                viper.SetConfigName("application")
+        }</span>
+
+        <span class="cov6" title="2">viper.SetConfigType("yml")
+        viper.AddConfigPath("./")
+        viper.AddConfigPath("./../")
+        viper.AddConfigPath("./../../")
+        viper.AddConfigPath("./../../../")
+        // For docker only
+        viper.AddConfigPath("/app")
+
+        err := viper.ReadInConfig()
+        if err != nil </span><span class="cov1" title="1">{
+                return
+        }</span>
+
+        <span class="cov1" title="1">viper.AutomaticEnv()
+
+        initAppConfig()
+        initServerConfig()
+        initDatabaseConfig()
+        initLoggerConfig()
+        initCacheConfig()</span>
+}
+
+func InitForTest() <span class="cov10" title="3">{
+        _ = os.Setenv("ENVIRONMENT", "test")
+        if !ConfigLoadedForTest </span><span class="cov1" title="1">{
+                Init()
+        }</span>
+        <span class="cov10" title="3">ConfigLoadedForTest = true</span>
+}
+</pre>
+		
+		<pre class="file" id="file7" style="display: none">package config
+
+import (
+        "fmt"
+        "net/url"
+        "time"
+)
+
+type DatabaseConfig struct {
+        DriverName            string
+        Name                  string
+        Host                  string
+        User                  string
+        Password              string
+        Port                  int
+        MaxPoolSize           int
+        ReadTimeout           time.Duration
+        WriteTimeout          time.Duration
+        ConnectionMaxOpen     int
+        ConnectionMaxIdle     int
+        ConnectionMaxLifeTime time.Duration
+}
+
+var Database DatabaseConfig
+
+func initDatabaseConfig() <span class="cov10" title="2">{
+        Database = DatabaseConfig{
+                DriverName:            mustGetString("DB_DRIVER"),
+                Name:                  mustGetString("DB_NAME"),
+                Host:                  mustGetString("DB_HOST"),
+                User:                  mustGetString("DB_USER"),
+                Password:              mustGetString("DB_PASSWORD"),
+                Port:                  mustGetInt("DB_PORT"),
+                MaxPoolSize:           mustGetInt("DB_POOL_SIZE"),
+                ReadTimeout:           mustGetDurationMs("DB_READ_TIMEOUT_MS"),
+                WriteTimeout:          mustGetDurationMs("DB_WRITE_TIMEOUT_MS"),
+                ConnectionMaxLifeTime: mustGetDurationMinute("DB_CONNECTION_MAX_LIFETIME_MINUTE"),
+        }
+}</span>
+
+func (dc DatabaseConfig) ConnectionURL() string <span class="cov10" title="2">{
+        return fmt.Sprintf("%s://%s:%s@%s:%d/%s?sslmode=disable",
+                dc.DriverName,
+                dc.User,
+                url.QueryEscape(dc.Password),
+                dc.Host,
+                dc.Port,
+                dc.Name,
+        )
+}</span>
+</pre>
+		
+		<pre class="file" id="file8" style="display: none">package config
+
+import (
+        "fmt"
+        "strconv"
+        "strings"
+        "time"
+
+        "github.com/spf13/viper"
+)
+
+func mustGetString(key string) string <span class="cov7" title="15">{
+        mustHave(key)
+        return viper.GetString(key)
+}</span>
+
+func mustGetStringArray(key string) []string <span class="cov1" title="1">{
+        mustHave(key)
+        return optionalGetStringArray(key)
+}</span>
+
+func optionalGetStringArray(key string) []string <span class="cov4" title="4">{
+        value := viper.GetString(key)
+        if value == "" </span><span class="cov1" title="1">{
+                return []string{}
+        }</span>
+        <span class="cov3" title="3">strs := strings.Split(value, ",")
+        for i, str := range strs </span><span class="cov6" title="9">{
+                strs[i] = strings.TrimSpace(str)
+        }</span>
+        <span class="cov3" title="3">return strs</span>
+}
+
+func optionalGetStringMap(key string) map[string]bool <span class="cov1" title="1">{
+        result := make(map[string]bool)
+        for _, str := range optionalGetStringArray(key) </span><span class="cov3" title="3">{
+                result[str] = true
+        }</span>
+        <span class="cov1" title="1">return result</span>
+}
+
+func mustGetBool(key string) bool <span class="cov1" title="1">{
+        mustHave(key)
+        return viper.GetBool(key)
+}</span>
+
+func mustGetDurationMs(key string) time.Duration <span class="cov6" title="11">{
+        return time.Millisecond * time.Duration(mustGetInt(key))
+}</span>
+
+func mustGetDurationMinute(key string) time.Duration <span class="cov3" title="3">{
+        return time.Minute * time.Duration(mustGetInt(key))
+}</span>
+
+func mustGetDurationSeconds(key string) time.Duration <span class="cov1" title="1">{
+        return time.Second * time.Duration(mustGetInt(key))
+}</span>
+
+func mustGetInt(key string) int <span class="cov8" title="25">{
+        mustHave(key)
+        v, err := strconv.Atoi(viper.GetString(key))
+        if err != nil </span><span class="cov2" title="2">{
+                panic(fmt.Sprintf("key %s is not a valid Integer value", key))</span>
+        }
+
+        <span class="cov8" title="23">return v</span>
+}
+
+func mustGetFloat(key string) float64 <span class="cov1" title="1">{
+        v, err := strconv.ParseFloat((viper.GetString(key)), 64)
+        if err != nil </span><span class="cov0" title="0">{
+                panic(fmt.Sprintf("key %s is not a valid float value", key))</span>
+        }
+
+        <span class="cov1" title="1">return v</span>
+}
+
+func mustHave(key string) <span class="cov10" title="46">{
+        if !viper.IsSet(key) </span><span class="cov3" title="3">{
+                panic(fmt.Sprintf("key %s is not set", key))</span>
+        }
+}
+
+func mustGetStringMapInt(key string) map[string]int <span class="cov1" title="1">{
+        mustHave(key)
+        strs := strings.Split(viper.GetString(key), ",")
+        stringMap := make(map[string]int)
+        for _, str := range strs </span><span class="cov2" title="2">{
+                kv := strings.Split(str, ":")
+                val, err := strconv.ParseInt(kv[1], 10, 64)
+                if err != nil </span><span class="cov0" title="0">{
+                        panic(fmt.Sprintf("failed to parse key/value pair: %s, %s", kv[0], kv[1]))</span>
+                }
+                <span class="cov2" title="2">stringMap[kv[0]] = int(val)</span>
+        }
+        <span class="cov1" title="1">return stringMap</span>
+}
+
+func mustGetBoolMap(key string) map[string]bool <span class="cov1" title="1">{
+        mustHave(key)
+        strs := strings.Split(viper.GetString(key), ",")
+        stringBoolMap := make(map[string]bool)
+        for _, str := range strs </span><span class="cov2" title="2">{
+                stringBoolMap[str] = true
+        }</span>
+        <span class="cov1" title="1">return stringBoolMap</span>
+}
+</pre>
+		
+		<pre class="file" id="file9" style="display: none">package config
+
+import "github.com/spf13/viper"
+
+type LoggerConfig struct {
+        Level             string   `mapstructure:"LOG_LEVEL"`
+        Development       bool     `mapstructure:"LOG_DEVELOPMENT"`
+        DisableCaller     bool     `mapstructure:"LOG_DISABLE_CALLER"`
+        DisableStacktrace bool     `mapstructure:"LOG_DISABLE_STACKTRACE"`
+        Encoding          string   `mapstructure:"LOG_ENCODING"`
+        OutputPaths       []string `mapstructure:"LOG_OUTPUT_PATHS"`
+        ErrorOutputPaths  []string `mapstructure:"LOG_ERROR_OUTPUT_PATHS"`
+}
+
+var Logger LoggerConfig
+
+func initLoggerConfig() <span class="cov4" title="3">{
+        Logger.Level = getStringOrDefault("LOG_LEVEL", "info")
+        Logger.Development = getBoolOrDefault("LOG_DEVELOPMENT", false)
+        Logger.DisableCaller = getBoolOrDefault("LOG_DISABLE_CALLER", false)
+        Logger.DisableStacktrace = getBoolOrDefault("LOG_DISABLE_STACKTRACE", false)
+        Logger.Encoding = getStringOrDefault("LOG_ENCODING", "json")
+        Logger.OutputPaths = getStringSliceOrDefault("LOG_OUTPUT_PATHS", []string{"stdout"})
+        Logger.ErrorOutputPaths = getStringSliceOrDefault("LOG_ERROR_OUTPUT_PATHS", []string{"stderr"})
+}</span>
+
+func getStringOrDefault(key, defaultValue string) string <span class="cov8" title="8">{
+        if value := viper.GetString(key); value != "" </span><span class="cov6" title="5">{
+                return value
+        }</span>
+        <span class="cov4" title="3">return defaultValue</span>
+}
+
+func getBoolOrDefault(key string, defaultValue bool) bool <span class="cov10" title="12">{
+        if value := viper.GetString(key); value != "" </span><span class="cov8" title="8">{
+                return value == "true"
+        }</span>
+        <span class="cov6" title="4">return defaultValue</span>
+}
+
+func getStringSliceOrDefault(key string, defaultValue []string) []string <span class="cov8" title="8">{
+        if value := viper.GetString(key); value != "" </span><span class="cov6" title="5">{
+                return []string{value}
+        }</span>
+        <span class="cov4" title="3">return defaultValue</span>
+}
+</pre>
+		
+		<pre class="file" id="file10" style="display: none">package config
+
+import "time"
+
+type ServerConfig struct {
+        Port         int
+        ReadTimeout  time.Duration
+        WriteTimeout time.Duration
+}
+
+var Server ServerConfig
+
+func initServerConfig() <span class="cov8" title="1">{
+        Server = ServerConfig{
+                Port:         mustGetInt("SERVER_PORT"),
+                ReadTimeout:  mustGetDurationMs("READ_TIMEOUT_MS"),
+                WriteTimeout: mustGetDurationMs("WRITE_TIMEOUT_MS"),
+        }
+}</span>
+</pre>
+		
+		<pre class="file" id="file11" style="display: none">package container
+
+import (
+        "go-skeleton/pkg/cache"
+        "go-skeleton/pkg/database"
+
+        "github.com/go-redis/redis/v8"
+        "github.com/jmoiron/sqlx"
+)
+
+// Container holds all the dependencies for the application
+type Container struct {
+        DB    *sqlx.DB
+        Cache *redis.Client
+}
+
+// NewContainer creates a new dependency injection container
+func NewContainer() Container <span class="cov10" title="2">{
+        return Container{
+                DB:    database.DBConn,
+                Cache: cache.RedisClient,
+        }
+}</span>
+</pre>
+		
+		<pre class="file" id="file12" style="display: none">package common
+
+type Header string
+
+const (
+        // https://datatracker.ietf.org/doc/html/rfc7540#section-8.1.2
+        // Just as in HTTP/1.x, header field names are strings of ASCII
+        // characters that are compared in a case-insensitive fashion. However,
+        // header field names MUST be converted to lowercase prior to their
+        // encoding in HTTP/2.  A request or response containing uppercase
+        // header field names MUST be treated as malformed (Section 8.1.2.6).
+
+        // HeaderRequestID HTTP Header Standard
+        HeaderRequestID              Header = `x-request-id`
+        HeaderAPIKey                 Header = `x-api-key`
+        HeaderContentType            Header = `content-type`
+        HeaderAccept                 Header = `accept`
+        HeaderAcceptLanguage         Header = `accept-language`
+        HeaderAcceptEncoding         Header = `accept-encoding`
+        HeaderAcceptCharset          Header = `accept-charset`
+        HeaderAcceptRanges           Header = `accept-ranges`
+        HeaderAcceptDatetime         Header = `accept-datetime`
+        HeaderAuthorization          Header = `authorization`
+        HeaderUserAgent              Header = `user-agent`
+        HeaderXForwardedFor          Header = `x-forwarded-for`
+        HeaderXForwardedHost         Header = `x-forwarded-host`
+        HeaderXForwardedProto        Header = `x-forwarded-proto`
+        HeaderXForwardedServer       Header = `x-forwarded-server`
+        HeaderXForwardedServerHeader Header = `x-forwarded-server-header`
+        HeaderXForwardedServerPort   Header = `x-forwarded-server-port`
+
+        // HeaderAppLang Custom HTTP Header
+        HeaderAppLang       Header = `x-app-lang`
+        HeaderAppDebug      Header = `x-app-debug`
+        HeaderCreationSteps Header = `x-create-step`
+
+        // HeaderLangEN Lang Header
+        HeaderLangEN Header = `en`
+        HeaderLangID Header = `id` // #nosec G101 -- This is a header name, not a credential
+)
+
+func (h Header) String() string <span class="cov0" title="0">{
+        return string(h)
+}</span>
+</pre>
+		
+		<pre class="file" id="file13" style="display: none">package common
+
+import (
+        "context"
+        "errors"
+        "log/slog"
+        "net/http"
+
+        apperr "go-skeleton/pkg/errors"
+        x "go-skeleton/pkg/errors/entity"
+        "go-skeleton/pkg/errors/general"
+
+        "github.com/gin-gonic/gin"
+)
+
+const (
+        ContentTypeCSV       = "text/csv"
+        ContentTypePlainText = "text/plain"
+        ContentTypeJSON      = "application/json"
+        ContentTypeXML       = "application/xml"
+        ContentTypePDF       = "application/pdf"
+        ContentTypeZIP       = "application/zip"
+        ContentTypePNG       = "image/png"
+        ContentTypeJPEG      = "image/jpeg"
+        ContentTypeExcel     = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+)
+
+type Contents struct {
+        Description      string
+        TransferEncoding string
+        Disposition      string
+        Types            string
+}
+
+// SuccessResp is the structure for all API responses.
+type SuccessResp struct {
+        Message    string `json:"message"`
+        Data       any    `json:"data"`
+        Pagination any    `json:"pagination,omitempty"`
+}
+
+type ErrorResp struct {
+        Error struct {
+                Code    x.Code   `json:"code"`
+                Message string   `json:"message"`
+                Errors  []Errors `json:"errors,omitempty"`
+        } `json:"error"`
+}
+
+type Errors struct {
+        Reason  string `json:"reason"`
+        Message string `json:"message"`
+}
+
+func ResponseSuccess(c *gin.Context, code int, message string, data any, pagination any) <span class="cov0" title="0">{
+        resp := SuccessResp{}
+        resp.Message = message
+        resp.Data = data
+
+        if pagination != nil </span><span class="cov0" title="0">{
+                resp.Pagination = pagination
+        }</span>
+
+        <span class="cov0" title="0">c.JSON(code, resp)</span>
+}
+
+func ResponseData(c *gin.Context, code int, content Contents, data []byte) <span class="cov0" title="0">{
+        // Set the response headers
+        c.Header("Content-Description", content.Description)
+        c.Header("Content-Transfer-Encoding", content.TransferEncoding)
+        c.Header("Content-Disposition", content.Disposition)
+        c.Header("Content-Type", content.Types)
+
+        c.Data(code, content.Types, data)
+}</span>
+
+func ResponseError(c *gin.Context, err error, errMessages ...string) <span class="cov0" title="0">{
+        debugMode := false
+        lang := HeaderLangEN.String()
+
+        if c.GetHeader(HeaderAppDebug.String()) == "true" </span><span class="cov0" title="0">{
+                debugMode = true
+        }</span>
+
+        <span class="cov0" title="0">if c.GetHeader(HeaderAppLang.String()) == HeaderLangID.String() </span><span class="cov0" title="0">{
+                lang = HeaderLangID.String()
+        }</span>
+
+        // Check if error because context Cancelled or Deadline Exceed
+        <span class="cov0" title="0">if errors.Is(x.RootCause(err), context.DeadlineExceeded) </span><span class="cov0" title="0">{
+                err = x.WrapWithCode(err, general.CodeContextDeadlineExceeded, "Error Context Deadline Exceeded")
+        }</span>
+
+        <span class="cov0" title="0">if errors.Is(x.RootCause(err), context.Canceled) </span><span class="cov0" title="0">{
+                c.Header(HeaderContentType.String(), "text/plain")
+                c.Status(499)
+                return
+        }</span>
+
+        <span class="cov0" title="0">statusCode, displayError := apperr.Compile(apperr.INTERNAL, err, lang, debugMode)
+        statusStr := http.StatusText(statusCode)
+
+        slog.ErrorContext(c, displayError.Error())
+
+        errResp := ErrorResp{
+                Error: struct {
+                        Code    x.Code   `json:"code"`
+                        Message string   `json:"message"`
+                        Errors  []Errors `json:"errors,omitempty"`
+                }{
+                        Code:    displayError.Code,
+                        Message: displayError.Message,
+                },
+        }
+
+        if len(errMessages) &gt; 0 </span><span class="cov0" title="0">{
+                var errs = make([]Errors, len(errMessages))
+
+                for i, m := range errMessages </span><span class="cov0" title="0">{
+                        errs[i].Reason = statusStr
+                        errs[i].Message = m
+                }</span>
+
+                <span class="cov0" title="0">errResp.Error.Errors = errs</span>
+        }
+
+        <span class="cov0" title="0">c.JSON(statusCode, errResp)</span>
+}
+</pre>
+		
+		<pre class="file" id="file14" style="display: none">package pingrepo
+
+import "go-skeleton/internal/ping/core/domain"
+
+type PingResponse struct {
+        Message string
+}
+
+func (r PingResponse) ToDomain() domain.Ping <span class="cov10" title="2">{
+        return domain.Ping{
+                Message: r.Message,
+        }
+}</span>
+</pre>
+		
+		<pre class="file" id="file15" style="display: none">package pingrepo
+
+import (
+        "context"
+        "go-skeleton/internal/ping/core/domain"
+        pkgErr "go-skeleton/pkg/errors/entity"
+        "go-skeleton/pkg/logger"
+
+        "github.com/go-redis/redis/v8"
+        "github.com/jmoiron/sqlx"
+)
+
+type PingRepository struct {
+        db    *sqlx.DB
+        cache *redis.Client
+}
+
+func NewPingRepository(db *sqlx.DB, cache *redis.Client) PingRepository <span class="cov10" title="3">{
+        return PingRepository{
+                db:    db,
+                cache: cache,
+        }
+}</span>
+
+func (r PingRepository) Ping(ctx context.Context, resp *domain.Ping) error <span class="cov6" title="2">{
+        if r.db != nil </span><span class="cov0" title="0">{
+                err := r.db.PingContext(ctx)
+                if err != nil </span><span class="cov0" title="0">{
+                        return pkgErr.Wrap(err, "ping database repository")
+                }</span>
+                <span class="cov0" title="0">logger.Info("Pinging database repository")</span>
+        }
+
+        <span class="cov6" title="2">if r.cache != nil </span><span class="cov0" title="0">{
+                err := r.cache.Ping(ctx).Err()
+                if err != nil </span><span class="cov0" title="0">{
+                        return pkgErr.Wrap(err, "ping cache repository")
+                }</span>
+
+                <span class="cov0" title="0">logger.Info("Pinging cache repository")</span>
+        }
+
+        <span class="cov6" title="2">result := PingResponse{
+                Message: "ping from repository",
+        }
+
+        *resp = result.ToDomain()
+
+        return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file16" style="display: none">package rest
+
+import (
+        httpcommon "go-skeleton/internal/common/http"
+        "go-skeleton/internal/ping/core/domain"
+        "go-skeleton/internal/ping/core/service"
+        "go-skeleton/pkg/logger"
+        "net/http"
+
+        "github.com/gin-gonic/gin"
+        "go.uber.org/zap"
+)
+
+type PingHandler struct {
+        PingService service.PingService
+}
+
+func NewPingHandler(
+        pingService service.PingService,
+) PingHandler <span class="cov0" title="0">{
+        return PingHandler{
+                PingService: pingService,
+        }
+}</span>
+
+func (h *PingHandler) Ping(c *gin.Context) <span class="cov0" title="0">{
+        logger.Info("Ping endpoint called",
+                zap.String("remote_addr", c.ClientIP()),
+                zap.String("user_agent", c.Request.UserAgent()),
+        )
+
+        var resp domain.Ping
+        err := h.PingService.Ping(c, &amp;resp)
+        if err != nil </span><span class="cov0" title="0">{
+                httpcommon.ResponseError(c, err)
+                return
+        }</span>
+
+        <span class="cov0" title="0">httpcommon.ResponseSuccess(c, http.StatusOK, "success", resp, nil)</span>
+}
+</pre>
+		
+		<pre class="file" id="file17" style="display: none">package rest
+
+import (
+        "github.com/gin-gonic/gin"
+)
+
+type Router struct {
+        handler PingHandler
+}
+
+func NewRouter(handler PingHandler) Router <span class="cov0" title="0">{
+        return Router{
+                handler: handler,
+        }
+}</span>
+
+// RegisterPingRoutes registers ping-specific routes to the provided router
+func (r Router) RegisterPingRoutes(router *gin.Engine) <span class="cov0" title="0">{
+        router.GET("/ping", r.handler.Ping)
+}</span>
+</pre>
+		
+		<pre class="file" id="file18" style="display: none">package port
+
+import (
+        "context"
+        "go-skeleton/internal/ping/core/domain"
+)
+
+// PingRepository defines the contract for ping repository operations
+type PingRepository interface {
+        Ping(ctx context.Context, resp *domain.Ping) error
+}
+
+// SvcContext holds all repository dependencies for the service layer
+type SvcContext struct {
+        Repo PingRepository
+}
+
+func NewServiceContext(
+        pingRepository PingRepository,
+) SvcContext <span class="cov10" title="3">{
+        return SvcContext{
+                Repo: pingRepository,
+        }
+}</span>
+</pre>
+		
+		<pre class="file" id="file19" style="display: none">package service
+
+import (
+        "context"
+        "go-skeleton/internal/ping/core/domain"
+        "go-skeleton/internal/ping/core/port"
+)
+
+// PingService implements business logic with repository access through context
+type PingService struct {
+        svcCtx port.SvcContext
+}
+
+// NewPingService creates a service with injected service context
+func NewPingService(svcCtx port.SvcContext) PingService <span class="cov10" title="3">{
+        return PingService{
+                svcCtx: svcCtx,
+        }
+}</span>
+
+// Ping returns a ping response through the service context
+func (s PingService) Ping(ctx context.Context, resp *domain.Ping) error <span class="cov6" title="2">{
+        return s.svcCtx.Repo.Ping(ctx, resp)
+}</span>
+</pre>
+		
+		<pre class="file" id="file20" style="display: none">package ping
+
+import (
+        "go-skeleton/container"
+        pingrepo "go-skeleton/internal/ping/adapter/ping_repo"
+        restHandl "go-skeleton/internal/ping/adapter/rest"
+        "go-skeleton/internal/ping/core/port"
+        "go-skeleton/internal/ping/core/service"
+
+        "github.com/gin-gonic/gin"
+)
+
+type Module struct {
+        Service     service.PingService
+        RestHandler restHandl.PingHandler
+        Router      restHandl.Router
+}
+
+func NewModule(container container.Container) Module <span class="cov0" title="0">{
+        // Inject database container to repository
+        pingRepo := pingrepo.NewPingRepository(container.DB, container.Cache)
+
+        // Create service context to group repositories
+        serviceCtx := port.NewServiceContext(pingRepo)
+
+        // Create service with injected context
+        svc := service.NewPingService(serviceCtx)
+
+        // Create handlers and router
+        restHandler := restHandl.NewPingHandler(svc)
+        router := restHandl.NewRouter(restHandler)
+
+        return Module{
+                Service:     svc,
+                RestHandler: restHandler,
+                Router:      router,
+        }
+}</span>
+
+// RegisterRoutes registers all ping routes to the provided router
+func (m Module) RegisterRoutes(router *gin.Engine) <span class="cov0" title="0">{
+        m.Router.RegisterPingRoutes(router)
+}</span>
+</pre>
+		
+		<pre class="file" id="file21" style="display: none">package main
+
+import (
+        "go-skeleton/cmd"
+        "go-skeleton/cmd/app"
+        "go-skeleton/config"
+        "go-skeleton/pkg/database"
+        "go-skeleton/pkg/logger"
+        "os"
+
+        "github.com/urfave/cli/v2"
+        "go.uber.org/zap"
+)
+
+func main() <span class="cov0" title="0">{
+        app.Init()
+        defer app.ShutDown()
+
+        cliApp := cli.NewApp()
+        cliApp.Name = "skeleton: Template for fast bootstrapping"
+        cliApp.Version = "1.0.0"
+
+        cliApp.Commands = cli.Commands{
+                {
+                        Name:  "server",
+                        Usage: "Start server",
+                        Action: func(c *cli.Context) error </span><span class="cov0" title="0">{
+                                logger.Info("Starting server command")
+                                cmd.StartServer(c.Context)
+                                return nil
+                        }</span>,
+                },
+                {
+                        Name:  "migrate",
+                        Usage: "run db migrations",
+                        Subcommands: []*cli.Command{
+                                {
+                                        Name:  "create",
+                                        Usage: "create a new migration file",
+                                        Flags: []cli.Flag{
+                                                &amp;cli.StringFlag{
+                                                        Name:     "name",
+                                                        Aliases:  []string{"n"},
+                                                        Usage:    "name of the migration",
+                                                        Required: true,
+                                                },
+                                        },
+                                        Action: func(c *cli.Context) error <span class="cov0" title="0">{
+                                                migrationName := c.String("name")
+                                                logger.Info("Creating new migration", zap.String("name", migrationName))
+
+                                                migration, err := database.InitMigration(config.Database)
+                                                if err != nil </span><span class="cov0" title="0">{
+                                                        logger.Error("Failed to initialize migration", zap.Error(err))
+                                                        return err
+                                                }</span>
+
+                                                <span class="cov0" title="0">err = migration.CreateMigration(migrationName)
+                                                return err</span>
+                                        },
+                                },
+                                {
+                                        Name:  "up",
+                                        Usage: "apply all migrations",
+                                        Action: func(_ *cli.Context) error <span class="cov0" title="0">{
+                                                logger.Info("Applying migrations up")
+                                                migration, err := database.InitMigration(config.Database)
+                                                if err != nil </span><span class="cov0" title="0">{
+                                                        logger.Error("Failed to initialize migration", zap.Error(err))
+                                                        return err
+                                                }</span>
+
+                                                <span class="cov0" title="0">err = migration.ApplyMigrations()
+                                                if err != nil </span><span class="cov0" title="0">{
+                                                        logger.Error("Failed to apply migrations", zap.Error(err))
+                                                }</span> else<span class="cov0" title="0"> {
+                                                        logger.Info("Migrations applied successfully")
+                                                }</span>
+                                                <span class="cov0" title="0">return err</span>
+                                        },
+                                },
+                                {
+                                        Name:  "down",
+                                        Usage: "apply all migrations",
+                                        Action: func(_ *cli.Context) error <span class="cov0" title="0">{
+                                                logger.Info("Rolling back migrations")
+                                                migration, err := database.InitMigration(config.Database)
+                                                if err != nil </span><span class="cov0" title="0">{
+                                                        logger.Error("Failed to initialize migration", zap.Error(err))
+                                                        return err
+                                                }</span>
+
+                                                <span class="cov0" title="0">err = migration.RollbackMigration()
+                                                if err != nil </span><span class="cov0" title="0">{
+                                                        logger.Error("Failed to rollback migration", zap.Error(err))
+                                                }</span> else<span class="cov0" title="0"> {
+                                                        logger.Info("Migration rolled back successfully")
+                                                }</span>
+                                                <span class="cov0" title="0">return err</span>
+                                        },
+                                },
+                        },
+                },
+        }
+
+        <span class="cov0" title="0">if err := cliApp.Run(os.Args); err != nil </span><span class="cov0" title="0">{
+                logger.Fatal("CLI application error", zap.Error(err))
+        }</span>
+}
+</pre>
+		
+		<pre class="file" id="file22" style="display: none">package cache
+
+import (
+        "context"
+        "fmt"
+        "go-skeleton/config"
+        "go-skeleton/pkg/logger"
+        "time"
+
+        "github.com/go-redis/redis/v8"
+        "go.uber.org/zap"
+)
+
+var (
+        RedisClient *redis.Client
+)
+
+func Init(cfg config.CacheConfig) <span class="cov0" title="0">{
+        // Create Redis client options
+        options := &amp;redis.Options{
+                Addr:         fmt.Sprintf("%s:%d", cfg.Host, cfg.Port),
+                PoolSize:     cfg.PoolSize,
+                DialTimeout:  cfg.DialTimeout,
+                ReadTimeout:  cfg.ReadTimeout,
+                WriteTimeout: cfg.WriteTimeout,
+                IdleTimeout:  cfg.IdleTimeout,
+        }
+
+        // Create Redis client
+        client := redis.NewClient(options)
+
+        // Test connection
+        ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+        _, err := client.Ping(ctx).Result()
+        cancel()
+        if err != nil </span><span class="cov0" title="0">{
+                logger.Fatal("failed to connect to Redis", zap.Error(err))
+        }</span>
+
+        <span class="cov0" title="0">RedisClient = client</span>
+}
+
+func CloseCache() <span class="cov0" title="0">{
+        if RedisClient != nil </span><span class="cov0" title="0">{
+                if err := RedisClient.Close(); err != nil </span><span class="cov0" title="0">{
+                        logger.Fatal("failed to close Redis connection", zap.Error(err))
+                }</span>
+        }
+}
+
+// GetClient returns the Redis client instance
+func GetClient() *redis.Client <span class="cov0" title="0">{
+        return RedisClient
+}</span>
+
+// Set stores a key-value pair with optional expiration
+func Set(ctx context.Context, key string, value any, expiration time.Duration) error <span class="cov0" title="0">{
+        return RedisClient.Set(ctx, key, value, expiration).Err()
+}</span>
+
+// Get retrieves a value by key
+func Get(ctx context.Context, key string) (string, error) <span class="cov0" title="0">{
+        return RedisClient.Get(ctx, key).Result()
+}</span>
+
+// Del deletes one or more keys
+func Del(ctx context.Context, keys ...string) error <span class="cov0" title="0">{
+        return RedisClient.Del(ctx, keys...).Err()
+}</span>
+
+// Exists checks if a key exists
+func Exists(ctx context.Context, keys ...string) (int64, error) <span class="cov0" title="0">{
+        return RedisClient.Exists(ctx, keys...).Result()
+}</span>
+
+// Expire sets a timeout on a key
+func Expire(ctx context.Context, key string, expiration time.Duration) error <span class="cov0" title="0">{
+        return RedisClient.Expire(ctx, key, expiration).Err()
+}</span>
+</pre>
+		
+		<pre class="file" id="file23" style="display: none">package database
+
+import (
+        "fmt"
+        "go-skeleton/config"
+        "go-skeleton/pkg/logger"
+
+        "github.com/jmoiron/sqlx"
+        _ "github.com/lib/pq" // PostgreSQL driver
+        "go.uber.org/zap"
+)
+
+var (
+        DBConn      *sqlx.DB
+        MigrationDB *sqlx.DB
+)
+
+func Init(cfg config.DatabaseConfig) <span class="cov0" title="0">{
+        // Build connection string for PostgreSQL
+        dsn := cfg.ConnectionURL()
+
+        // SQL connection for all operations
+        db, err := sqlx.Connect(cfg.DriverName, dsn)
+        if err != nil </span><span class="cov0" title="0">{
+                logger.Fatal("failed to connect to database with sqlx", zap.Error(err))
+        }</span>
+
+        // DB pool configuration
+        <span class="cov0" title="0">db.SetMaxOpenConns(cfg.ConnectionMaxOpen)
+        db.SetMaxIdleConns(cfg.ConnectionMaxIdle)
+        db.SetConnMaxLifetime(cfg.ConnectionMaxLifeTime)
+
+        DBConn = db</span>
+}
+
+func CloseDB() <span class="cov0" title="0">{
+        if DBConn.DB != nil </span><span class="cov0" title="0">{
+                if err := DBConn.DB.Close(); err != nil </span><span class="cov0" title="0">{
+                        logger.Fatal("failed to close database connection", zap.Error(err))
+                }</span>
+        }
+}
+
+func CloseMigrationDB() <span class="cov0" title="0">{
+        if MigrationDB != nil &amp;&amp; MigrationDB.DB != nil </span><span class="cov0" title="0">{
+                if err := MigrationDB.DB.Close(); err != nil </span><span class="cov0" title="0">{
+                        logger.Error("failed to close migration database connection", zap.Error(err))
+                }</span>
+                <span class="cov0" title="0">MigrationDB = nil</span>
+        }
+}
+
+func InitMigration(cfg config.DatabaseConfig) (*MigrationManager, error) <span class="cov0" title="0">{
+        // Create a separate database connection specifically for migrations
+        // Build connection string for PostgreSQL
+        dsn := cfg.ConnectionURL()
+
+        // SQL connection for all operations
+        db, err := sqlx.Connect(cfg.DriverName, dsn)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("failed to connect to database with sqlx: %w", err)
+        }</span>
+
+        // DB pool configuration
+        <span class="cov0" title="0">db.SetMaxOpenConns(cfg.ConnectionMaxOpen)
+        db.SetMaxIdleConns(cfg.ConnectionMaxIdle)
+        db.SetConnMaxLifetime(cfg.ConnectionMaxLifeTime)
+
+        MigrationDB = db
+
+        // Create a migration manager with the separate connection
+        migrationsDir := "migrations"
+        migrationManager := NewMigrationManager(migrationsDir)
+
+        return migrationManager, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file24" style="display: none">package database
+
+import (
+        "errors"
+        "fmt"
+        "os"
+        "path/filepath"
+        "time"
+
+        "github.com/golang-migrate/migrate/v4"
+        "github.com/golang-migrate/migrate/v4/database/postgres"
+        _ "github.com/golang-migrate/migrate/v4/source/file" // file source driver
+)
+
+// MigrationManager handles database migrations
+type MigrationManager struct {
+        Directory string
+}
+
+// NewMigrationManager creates a new migration manager
+func NewMigrationManager(directory string) *MigrationManager <span class="cov0" title="0">{
+        return &amp;MigrationManager{
+                Directory: directory,
+        }
+}</span>
+
+// CreateMigration creates a new migration file with the given name
+func (mm *MigrationManager) CreateMigration(name string) error <span class="cov0" title="0">{
+        // Ensure migrations directory exists
+        if err := os.MkdirAll(mm.Directory, 0755); err != nil </span><span class="cov0" title="0">{
+                return fmt.Errorf("failed to create migrations directory: %w", err)
+        }</span>
+
+        // Generate timestamp for migration version
+        <span class="cov0" title="0">timestamp := time.Now().Format("20060102150405")
+
+        // Create up migration file
+        upFileName := fmt.Sprintf("%s_%s.up.sql", timestamp, name)
+        upFilePath := filepath.Join(mm.Directory, upFileName)
+
+        if err := os.WriteFile(upFilePath, []byte("-- Write your UP migration SQL here\n"), 0600); err != nil </span><span class="cov0" title="0">{
+                return fmt.Errorf("failed to create up migration file: %w", err)
+        }</span>
+
+        // Create down migration file
+        <span class="cov0" title="0">downFileName := fmt.Sprintf("%s_%s.down.sql", timestamp, name)
+        downFilePath := filepath.Join(mm.Directory, downFileName)
+
+        if err := os.WriteFile(downFilePath, []byte("-- Write your DOWN migration SQL here\n"), 0600); err != nil </span><span class="cov0" title="0">{
+                return fmt.Errorf("failed to create down migration file: %w", err)
+        }</span>
+
+        <span class="cov0" title="0">fmt.Printf("Created migration files:\n  %s\n  %s\n", upFilePath, downFilePath)
+        return nil</span>
+}
+
+// getMigrate creates a new migrate instance
+func (mm *MigrationManager) getMigrate() (*migrate.Migrate, error) <span class="cov0" title="0">{
+        // Create a new postgres driver
+        driver, err := postgres.WithInstance(MigrationDB.DB, &amp;postgres.Config{
+                MigrationsTable: "schema_migrations",
+        })
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("failed to create postgres driver: %w", err)
+        }</span>
+
+        // Create a new migrate instance
+        <span class="cov0" title="0">sourceURL := fmt.Sprintf("file://%s", mm.Directory)
+        m, err := migrate.NewWithDatabaseInstance(sourceURL, "postgres", driver)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("failed to create migrate instance: %w", err)
+        }</span>
+
+        <span class="cov0" title="0">return m, nil</span>
+}
+
+// ApplyMigrations applies all migrations
+func (mm *MigrationManager) ApplyMigrations() error <span class="cov0" title="0">{
+        m, err := mm.getMigrate()
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        // Apply all migrations
+        <span class="cov0" title="0">if err := m.Up(); err != nil &amp;&amp; !errors.Is(err, migrate.ErrNoChange) </span><span class="cov0" title="0">{
+                return fmt.Errorf("failed to apply migrations: %w", err)
+        }</span>
+
+        <span class="cov0" title="0">if sourceErr, dbErr := m.Close(); sourceErr != nil || dbErr != nil </span><span class="cov0" title="0">{
+                fmt.Printf("Warning: failed to close migration instance: source=%v, db=%v\n", sourceErr, dbErr)
+        }</span>
+
+        // Close the migration database connection
+        <span class="cov0" title="0">CloseMigrationDB()
+
+        fmt.Println("Migrations applied successfully")
+        return nil</span>
+}
+
+// ApplyMigrationsSteps applies a specific number of migrations
+func (mm *MigrationManager) ApplyMigrationsSteps(steps int) error <span class="cov0" title="0">{
+        m, err := mm.getMigrate()
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        <span class="cov0" title="0">defer m.Close()
+
+        // Apply specific number of migrations
+        if err := m.Steps(steps); err != nil &amp;&amp; !errors.Is(err, migrate.ErrNoChange) </span><span class="cov0" title="0">{
+                return fmt.Errorf("failed to apply %d migrations: %w", steps, err)
+        }</span>
+
+        // Close the migration database connection
+        <span class="cov0" title="0">CloseMigrationDB()
+
+        fmt.Printf("Applied %d migrations successfully\n", steps)
+        return nil</span>
+}
+
+// RollbackMigration rolls back the last applied migration
+func (mm *MigrationManager) RollbackMigration() error <span class="cov0" title="0">{
+        return mm.RollbackMigrationsSteps(1)
+}</span>
+
+// RollbackMigrationsSteps rolls back a specific number of migrations
+func (mm *MigrationManager) RollbackMigrationsSteps(steps int) error <span class="cov0" title="0">{
+        m, err := mm.getMigrate()
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        // Don't close migrate instance to avoid affecting main Migration connection
+        // defer m.Close()
+
+        // Roll back specific number of migrations
+        <span class="cov0" title="0">if err := m.Steps(-steps); err != nil &amp;&amp; !errors.Is(err, migrate.ErrNoChange) </span><span class="cov0" title="0">{
+                return fmt.Errorf("failed to roll back %d migrations: %w", steps, err)
+        }</span>
+
+        // Close the migration database connection
+        <span class="cov0" title="0">CloseMigrationDB()
+
+        fmt.Printf("Rolled back %d migrations successfully\n", steps)
+        return nil</span>
+}
+
+// RollbackAllMigrations rolls back all applied migrations
+func (mm *MigrationManager) RollbackAllMigrations() error <span class="cov0" title="0">{
+        m, err := mm.getMigrate()
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        // Don't close migrate instance to avoid affecting main Migration connection
+        // defer m.Close()
+
+        // Roll back all migrations
+        <span class="cov0" title="0">if err := m.Down(); err != nil &amp;&amp; !errors.Is(err, migrate.ErrNoChange) </span><span class="cov0" title="0">{
+                return fmt.Errorf("failed to roll back all migrations: %w", err)
+        }</span>
+
+        // Close the migration database connection
+        <span class="cov0" title="0">CloseMigrationDB()
+
+        fmt.Println("All migrations rolled back successfully")
+        return nil</span>
+}
+
+// MigrateTo migrates to a specific version
+func (mm *MigrationManager) MigrateTo(version uint) error <span class="cov0" title="0">{
+        m, err := mm.getMigrate()
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        // Don't close migrate instance to avoid affecting main Migration connection
+        // defer m.Close()
+
+        // Migrate to specific version
+        <span class="cov0" title="0">if err := m.Migrate(version); err != nil &amp;&amp; !errors.Is(err, migrate.ErrNoChange) </span><span class="cov0" title="0">{
+                return fmt.Errorf("failed to migrate to version %d: %w", version, err)
+        }</span>
+
+        // Close the migration database connection
+        <span class="cov0" title="0">CloseMigrationDB()
+
+        fmt.Printf("Migrated to version %d successfully\n", version)
+        return nil</span>
+}
+
+// GetCurrentVersion returns the current migration version
+func (mm *MigrationManager) GetCurrentVersion() (uint, bool, error) <span class="cov0" title="0">{
+        m, err := mm.getMigrate()
+        if err != nil </span><span class="cov0" title="0">{
+                return 0, false, err
+        }</span>
+        // Don't close migrate instance to avoid affecting main Migration connection
+        // defer m.Close()
+
+        <span class="cov0" title="0">return m.Version()</span>
+}
+</pre>
+		
+		<pre class="file" id="file25" style="display: none">package errors
+
+import (
+        "fmt"
+        "go-skeleton/pkg/errors/cache"
+        "go-skeleton/pkg/errors/entity"
+        "go-skeleton/pkg/errors/general"
+        httperr "go-skeleton/pkg/errors/http"
+        "go-skeleton/pkg/errors/sql"
+        "net/http"
+        "strings"
+
+        "github.com/palantir/stacktrace"
+)
+
+var svcError map[ServiceType]entity.ErrorMessage
+
+type ServiceType int
+
+const (
+        COMMON ServiceType = iota + 1
+        HTTP
+        SQL
+        INTERNAL
+        CACHE
+)
+
+const (
+        // Language Header
+        LangEN string = `en`
+        LangID string = `id`
+)
+
+func init() <span class="cov1" title="1">{
+        stacktrace.DefaultFormat = stacktrace.FormatFull
+        svcError = map[ServiceType]entity.ErrorMessage{
+                COMMON: general.ErrorMessages,
+                HTTP:   httperr.ErrorMessages,
+                SQL:    sql.ErrorMessages,
+                CACHE:  cache.ErrorMessages,
+        }
+}</span>
+
+// AppError - Application Error Structure
+type AppError struct {
+        Code       entity.Code `json:"code"`
+        Message    string      `json:"message" example:"error"`
+        DebugError *string     `json:"debug_error,omitempty" example:"error"`
+        sys        error
+}
+
+type ValidationError struct {
+        Field   string `json:"field"`
+        Message string `json:"message"`
+}
+
+func (e *AppError) Error() string <span class="cov1" title="1">{
+        return e.sys.Error()
+}</span>
+
+// Compile - Get Error Code and HTTP Status
+// Common --&gt; Service --&gt; Default
+func Compile(service ServiceType, err error, lang string, debugMode bool) (int, AppError) <span class="cov5" title="5">{
+        // Developer Debug Error
+        var debugErr *string
+        if debugMode </span><span class="cov3" title="2">{
+                errStr := err.Error()
+                if len(errStr) &gt; 0 </span><span class="cov3" title="2">{
+                        debugErr = &amp;errStr
+                }</span>
+        }
+
+        // Get Error Code
+        <span class="cov5" title="5">code := entity.ErrCode(err)
+
+        // Ger Common, HTTP and SQL error message
+        types := []ServiceType{COMMON, HTTP, SQL, CACHE}
+        for _, st := range types </span><span class="cov10" title="20">{
+                if errMessage, ok := svcError[st][code]; ok </span><span class="cov0" title="0">{
+                        msg := errMessage.ID
+                        if lang == LangEN </span><span class="cov0" title="0">{
+                                msg = errMessage.EN
+                        }</span>
+
+                        <span class="cov0" title="0">if errMessage.HasAnnotation </span><span class="cov0" title="0">{
+                                args := fmt.Sprintf("%q", err.Error())
+                                index := strings.Index(args, `\n`)
+                                if index &gt; 0 </span><span class="cov0" title="0">{
+                                        args = strings.TrimSpace(args[1:index])
+                                }</span>
+                                <span class="cov0" title="0">msg = fmt.Sprintf(msg, args)</span>
+                        }
+
+                        <span class="cov0" title="0">if errMessage.CustomMessage </span><span class="cov0" title="0">{
+                                newErr := fmt.Sprintf("%v", err)
+                                errPart := strings.Split(newErr, "\n")
+                                newErr = errPart[0]
+                                msg = fmt.Sprintf(msg, newErr)
+                        }</span>
+
+                        <span class="cov0" title="0">return errMessage.StatusCode, AppError{
+                                Code:       code,
+                                Message:    msg,
+                                sys:        err,
+                                DebugError: debugErr,
+                        }</span>
+                }
+        }
+
+        // Get Service Error
+        <span class="cov5" title="5">if errMessages, ok := svcError[service]; ok </span><span class="cov5" title="5">{
+                if errMessage, ok := errMessages[code]; ok </span><span class="cov0" title="0">{
+                        msg := errMessage.ID
+                        if lang == LangEN </span><span class="cov0" title="0">{
+                                msg = errMessage.EN
+                        }</span>
+
+                        // error code example
+                        <span class="cov0" title="0">if errMessage.HasAnnotation </span><span class="cov0" title="0">{
+                                args := fmt.Sprintf("%q", err.Error())
+                                index := strings.Index(args, `\n`)
+                                if index &gt; 0 </span><span class="cov0" title="0">{
+                                        args = strings.TrimSpace(args[1:index])
+                                }</span>
+                                <span class="cov0" title="0">msg = fmt.Sprintf(msg, args)</span>
+                        }
+
+                        <span class="cov0" title="0">if errMessage.CustomMessage </span><span class="cov0" title="0">{
+                                newErr := fmt.Sprintf("%v", err)
+                                errPart := strings.Split(newErr, "\n")
+                                newErr = errPart[0]
+                                msg = fmt.Sprintf(msg, newErr)
+                        }</span>
+
+                        // Humanize Error Msg Fulfillment API
+                        <span class="cov0" title="0">if code == httperr.CodeHTTPValidatorError </span><span class="cov0" title="0">{
+                                if err.Error() != "" </span><span class="cov0" title="0">{
+                                        msg = strings.Split(err.Error(), "\n ---")[0]
+                                }</span>
+                        }
+
+                        <span class="cov0" title="0">return errMessage.StatusCode, AppError{
+                                Code:       code,
+                                Message:    msg,
+                                sys:        err,
+                                DebugError: debugErr,
+                        }</span>
+                }
+                <span class="cov5" title="5">return http.StatusInternalServerError, AppError{
+                        Code:       code,
+                        Message:    "error message not defined!",
+                        sys:        err,
+                        DebugError: debugErr,
+                }</span>
+        }
+
+        // Set Default Error
+        <span class="cov0" title="0">return http.StatusInternalServerError, AppError{
+                Code:       code,
+                Message:    "service error not defined!",
+                sys:        err,
+                DebugError: debugErr,
+        }</span>
+}
+</pre>
+		
+		<pre class="file" id="file26" style="display: none">package logger
+
+import (
+        "fmt"
+        "go-skeleton/config"
+        "log"
+        "os"
+        "strings"
+
+        "go.uber.org/zap"
+        "go.uber.org/zap/zapcore"
+)
+
+var (
+        globalLogger *zap.Logger
+        sugar        *zap.SugaredLogger
+)
+
+// Init initializes the global logger with the provided configuration
+func Init(logConfig config.LoggerConfig) <span class="cov0" title="0">{
+        // Parse log level
+        var level zapcore.Level
+        if err := level.UnmarshalText([]byte(strings.ToLower(logConfig.Level))); err != nil </span><span class="cov0" title="0">{
+                level = zapcore.InfoLevel
+        }</span>
+
+        // Configure encoder
+        <span class="cov0" title="0">var encoderConfig zapcore.EncoderConfig
+        if logConfig.Development </span><span class="cov0" title="0">{
+                encoderConfig = zap.NewDevelopmentEncoderConfig()
+                encoderConfig.EncodeLevel = zapcore.CapitalColorLevelEncoder
+        }</span> else<span class="cov0" title="0"> {
+                encoderConfig = zap.NewProductionEncoderConfig()
+                encoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
+        }</span>
+
+        // Choose an encoder type
+        <span class="cov0" title="0">var encoder zapcore.Encoder
+        if logConfig.Encoding == "console" </span><span class="cov0" title="0">{
+                encoder = zapcore.NewConsoleEncoder(encoderConfig)
+        }</span> else<span class="cov0" title="0"> {
+                encoder = zapcore.NewJSONEncoder(encoderConfig)
+        }</span>
+
+        // writeSyncer always defaults to stdout for now
+        <span class="cov0" title="0">writeSyncer := zapcore.AddSync(os.Stdout)
+
+        // Create core
+        core := zapcore.NewCore(encoder, writeSyncer, level)
+
+        // Create a logger with options
+        opts := []zap.Option{
+                zap.AddStacktrace(zapcore.ErrorLevel),
+        }
+
+        if !logConfig.DisableCaller </span><span class="cov0" title="0">{
+                opts = append(opts, zap.AddCaller())
+        }</span>
+
+        <span class="cov0" title="0">if !logConfig.DisableStacktrace </span><span class="cov0" title="0">{
+                opts = append(opts, zap.AddStacktrace(zapcore.ErrorLevel))
+        }</span>
+
+        <span class="cov0" title="0">if logConfig.Development </span><span class="cov0" title="0">{
+                opts = append(opts, zap.Development())
+        }</span>
+
+        <span class="cov0" title="0">globalLogger = zap.New(core, opts...)
+        sugar = globalLogger.Sugar()</span>
+}
+
+// GetLogger returns the global zap logger
+func GetLogger() *zap.Logger <span class="cov0" title="0">{
+        if globalLogger == nil </span><span class="cov0" title="0">{
+                // Fallback to nop logger if not initialized
+                return zap.NewNop()
+        }</span>
+        <span class="cov0" title="0">return globalLogger</span>
+}
+
+// GetSugar returns the global sugared logger
+func GetSugar() *zap.SugaredLogger <span class="cov0" title="0">{
+        if sugar == nil </span><span class="cov0" title="0">{
+                // Fallback to nop logger if not initialized
+                return zap.NewNop().Sugar()
+        }</span>
+        <span class="cov0" title="0">return sugar</span>
+}
+
+// Sync flushes any buffered log entries
+func Sync() <span class="cov0" title="0">{
+        if globalLogger != nil </span><span class="cov0" title="0">{
+                if err := globalLogger.Sync(); err != nil </span><span class="cov0" title="0">{
+                        log.Fatal(fmt.Errorf("failed to flushing log: %w", err))
+                }</span>
+        }
+        // no explicit return needed
+}
+
+// Info Convenience functions for common logging patterns
+func Info(msg string, fields ...zap.Field) <span class="cov0" title="0">{
+        GetLogger().Info(msg, fields...)
+}</span>
+
+func Error(msg string, fields ...zap.Field) <span class="cov0" title="0">{
+        GetLogger().Error(msg, fields...)
+}</span>
+
+func Debug(msg string, fields ...zap.Field) <span class="cov0" title="0">{
+        GetLogger().Debug(msg, fields...)
+}</span>
+
+func Warn(msg string, fields ...zap.Field) <span class="cov0" title="0">{
+        GetLogger().Warn(msg, fields...)
+}</span>
+
+func Fatal(msg string, fields ...zap.Field) <span class="cov0" title="0">{
+        GetLogger().Fatal(msg, fields...)
+}</span>
+
+// Info Sugared convenience functions
+func Infof(template string, args ...any) <span class="cov0" title="0">{
+        GetSugar().Infof(template, args...)
+}</span>
+
+func Errorf(template string, args ...any) <span class="cov0" title="0">{
+        GetSugar().Errorf(template, args...)
+}</span>
+
+func Debugf(template string, args ...any) <span class="cov0" title="0">{
+        GetSugar().Debugf(template, args...)
+}</span>
+
+func Warnf(template string, args ...any) <span class="cov0" title="0">{
+        GetSugar().Warnf(template, args...)
+}</span>
+
+func Fatalf(template string, args ...any) <span class="cov0" title="0">{
+        GetSugar().Fatalf(template, args...)
+}</span>
+</pre>
+		
+		<pre class="file" id="file27" style="display: none">package logger
+
+import (
+        httpcommon "go-skeleton/internal/common/http"
+        "time"
+
+        "github.com/gin-gonic/gin"
+        "go.uber.org/zap"
+)
+
+// GinLoggingMiddleware logs HTTP requests and responses for Gin
+func GinLoggingMiddleware() gin.HandlerFunc <span class="cov0" title="0">{
+        return func(c *gin.Context) </span><span class="cov0" title="0">{
+                start := time.Now()
+
+                // Log request
+                GetLogger().Info("HTTP Request",
+                        zap.String("method", c.Request.Method),
+                        zap.String("url", c.Request.URL.String()),
+                        zap.String("remote_addr", c.ClientIP()),
+                        zap.String("user_agent", c.Request.UserAgent()),
+                        zap.String("request_id", c.GetHeader(httpcommon.HeaderRequestID.String())),
+                )
+
+                // Process request
+                c.Next()
+
+                // Log response
+                duration := time.Since(start)
+                GetLogger().Info("HTTP Response",
+                        zap.String("method", c.Request.Method),
+                        zap.String("url", c.Request.URL.String()),
+                        zap.Int("status_code", c.Writer.Status()),
+                        zap.Duration("duration", duration),
+                        zap.String("request_id", c.GetHeader("X-Request-ID")),
+                )
+        }</span>
+}
+
+// LoggingMiddleware logs HTTP requests and responses (kept for backward compatibility)
+func LoggingMiddleware() gin.HandlerFunc <span class="cov0" title="0">{
+        return GinLoggingMiddleware()
+}</span>
+</pre>
+		
+		</div>
+	</body>
+	<script>
+	(function() {
+		var files = document.getElementById('files');
+		var visible;
+		files.addEventListener('change', onChange, false);
+		function select(part) {
+			if (visible)
+				visible.style.display = 'none';
+			visible = document.getElementById(part);
+			if (!visible)
+				return;
+			files.value = part;
+			visible.style.display = 'block';
+			location.hash = part;
+		}
+		function onChange() {
+			select(files.value);
+			window.scrollTo(0, 0);
+		}
+		if (location.hash != "") {
+			select(location.hash.substr(1));
+		}
+		if (!visible) {
+			select("file0");
+		}
+	})();
+	</script>
+</html>

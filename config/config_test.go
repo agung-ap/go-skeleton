@@ -1,21 +1,19 @@
-package config_test
+package config
 
 import (
-	"go-skeleton/config"
 	"testing"
 
-	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestInitFromFile(t *testing.T) {
-	config.Init()
-	assert.NotNil(t, config.Server)
+	Init()
+	assert.NotNil(t, Server)
 }
 
 func TestInitForTest(t *testing.T) {
-	config.InitForTest()
-	assert.True(t, config.ConfigLoadedForTest)
+	InitForTest()
+	assert.True(t, ConfigLoadedForTest)
 }
 
 func TestForMissingConfig(t *testing.T) {
@@ -23,8 +21,9 @@ func TestForMissingConfig(t *testing.T) {
 		r := recover()
 		assert.NotNil(t, r)
 	}()
-	config.InitForTest()
-	viper.GetString("DUMMY")
+	InitForTest()
+	// This should panic because DUMMY key doesn't exist
+	mustGetString("DUMMY_NON_EXISTENT_KEY")
 }
 
 func TestForInvalidIntConfig(t *testing.T) {
@@ -32,6 +31,7 @@ func TestForInvalidIntConfig(t *testing.T) {
 		r := recover()
 		assert.NotNil(t, r)
 	}()
-	config.InitForTest()
-	viper.GetString("LOG_LEVEL")
+	InitForTest()
+	// This should panic because LOG_LEVEL is not a valid integer
+	mustGetInt("LOG_LEVEL")
 }

@@ -1,4 +1,3 @@
-//nolint:unused // This file contains helper functions that may be referenced by configuration loading in other modules.
 package config
 
 import (
