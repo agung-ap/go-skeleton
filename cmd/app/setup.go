@@ -2,7 +2,7 @@ package app
 
 import (
 	"go-skeleton/config"
-	container2 "go-skeleton/container"
+	dicontainer "go-skeleton/container"
 	"go-skeleton/internal/ping"
 	"go-skeleton/pkg/cache"
 	"go-skeleton/pkg/database"
@@ -11,7 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-var container container2.Container
+var container *dicontainer.Container
 
 func Init() {
 	config.Init()
@@ -20,7 +20,7 @@ func Init() {
 	cache.Init(config.RedisCache)
 
 	// Initialize dependency injection container
-	container = container2.NewContainer()
+	container = dicontainer.NewContainer()
 }
 
 func SetupRouter() *gin.Engine {

@@ -15,8 +15,8 @@ type Container struct {
 }
 
 // NewContainer creates a new dependency injection container
-func NewContainer() Container {
-	return Container{
+func NewContainer() *Container {
+	return &Container{
 		DB:    database.DBConn,
 		Cache: cache.RedisClient,
 	}
