@@ -11,7 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-var container *dicontainer.Container
+var container dicontainer.Container
 
 func Init() {
 	config.Init()
@@ -28,7 +28,7 @@ func SetupRouter() *gin.Engine {
 	router := NewGlobalRouter()
 
 	// Initialize modules with dependency injection
-	pingModule := ping.NewModule(container)
+	pingModule := ping.NewModule(&container)
 
 	// Register module routes
 	pingModule.RegisterRoutes(router)

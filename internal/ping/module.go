@@ -16,23 +16,23 @@ type Module struct {
 	Router      *restHandl.Router
 }
 
-func NewModule(container *dicontainer.Container) *Module {
+func NewModule(container *dicontainer.Container) Module {
 	// Inject database container to repository
 	pingRepo := pingrepo.NewPingRepository(container.DB, container.Cache)
 
 	// Create service context to group repositories
-	serviceCtx := port.NewServiceContext(pingRepo)
+	serviceCtx := port.NewServiceContext(&pingRepo)
 
 	// Create service with injected context
-	svc := service.NewPingService(serviceCtx)
+	svc := service.NewPingService(&serviceCtx)
 
 	// Create handlers and router
-	restHandler := restHandl.NewPingHandler(svc)
-	router := restHandl.NewRouter(restHandler)
+	restHandler := restHandl.NewPingHandler(&svc)
+	router := restHandl.NewRouter(&restHandler)
 
-	return &Module{
-		Service:     svc,
-		RestHandler: restHandler,
+	return Module{
+		Service:     &svc,
+		RestHandler: &restHandler,
 		Router:      router,
 	}
 }

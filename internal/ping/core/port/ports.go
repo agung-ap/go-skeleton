@@ -13,8 +13,8 @@ type SvcContext struct {
 
 func NewServiceContext(
 	pingRepository *pingrepo.PingRepository,
-) *SvcContext {
-	return &SvcContext{
+) SvcContext {
+	return SvcContext{
 		Repo: pingRepository,
 	}
 }

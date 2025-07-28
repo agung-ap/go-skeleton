@@ -12,8 +12,8 @@ type PingService struct {
 }
 
 // NewPingService creates a service with injected service context
-func NewPingService(svcCtx *port.SvcContext) *PingService {
-	return &PingService{
+func NewPingService(svcCtx *port.SvcContext) PingService {
+	return PingService{
 		svcCtx: svcCtx,
 	}
 }

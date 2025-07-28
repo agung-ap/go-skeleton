@@ -17,8 +17,8 @@ type PingHandler struct {
 
 func NewPingHandler(
 	pingService *service.PingService,
-) *PingHandler {
-	return &PingHandler{
+) PingHandler {
+	return PingHandler{
 		PingService: pingService,
 	}
 }
