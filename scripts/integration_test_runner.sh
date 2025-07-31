@@ -63,6 +63,8 @@ wait_for_service() {
     return 1
 }
 
+
+
 # Function to run integration tests
 run_integration_tests() {
     print_step "Starting integration tests..."
@@ -134,6 +136,16 @@ cleanup() {
 
 # Main execution
 main() {
+    # Run linting
+    print_step "Running linting..."
+    make lint
+    if [ $? -eq 0 ]; then
+        print_status "Linting completed! ✅"
+    else
+        print_error "Linting failed! ❌"
+        return 1
+    fi
+    
     # Check if podman is available
     if ! command -v podman &> /dev/null; then
         print_error "Podman is not installed. Please install Podman to run integration tests."
@@ -163,14 +175,15 @@ main() {
     wait_for_service "Redis" "localhost" $REDIS_PORT
     wait_for_service "Go Application" "localhost" $APP_PORT
     
-    # Step 3: Run database migrations (if needed)
+    # Step 4: Run database migrations (if needed)
     print_step "Running database migrations..."
-    # You can add migration commands here if needed
+    # TODO: Add migration commands here if needed
+
     
-    # Step 4: Run integration tests
+    # Step 5: Run integration tests
     run_integration_tests
     
-    # Step 5: Run Go integration tests (if any)
+    # Step 6: Run Go integration tests (if any)
     if grep -r "//go:build integration" . --include="*_test.go" >/dev/null; then
         run_go_integration_tests
     else

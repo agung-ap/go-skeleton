@@ -34,9 +34,9 @@ func initDatabaseConfig() {
 		Password:              viper.GetString("DB_PASSWORD"),
 		Port:                  viper.GetInt("DB_PORT"),
 		MaxPoolSize:           viper.GetInt("DB_POOL_SIZE"),
-		ReadTimeout:           time.Duration(viper.GetDuration("DB_READ_TIMEOUT_MS").Milliseconds()),
-		WriteTimeout:          time.Duration(viper.GetDuration("DB_WRITE_TIMEOUT_MS").Milliseconds()),
-		ConnectionMaxLifeTime: time.Duration(viper.GetDuration("DB_CONNECTION_MAX_LIFETIME_MINUTE").Minutes()),
+		ReadTimeout:           time.Duration(viper.GetInt("DB_READ_TIMEOUT_MS")) * time.Millisecond,
+		WriteTimeout:          time.Duration(viper.GetInt("DB_WRITE_TIMEOUT_MS")) * time.Millisecond,
+		ConnectionMaxLifeTime: time.Duration(viper.GetInt("DB_CONNECTION_MAX_LIFETIME_MINUTE")) * time.Minute,
 	}
 }
 

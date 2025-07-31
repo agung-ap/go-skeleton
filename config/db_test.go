@@ -48,7 +48,7 @@ func TestInitDatabaseConfig_WithTestEnvironment(t *testing.T) {
 
 	// Reset viper and load test configuration
 	viper.Reset()
-	os.Setenv("ENVIRONMENT", "test")
+	t.Setenv("ENVIRONMENT", "test")
 	Init()
 
 	assert.Equal(t, "postgres", Database.DriverName)
