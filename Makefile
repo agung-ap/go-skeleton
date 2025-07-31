@@ -22,6 +22,17 @@ test-coverage:
 	go test -v -coverprofile=coverage.out ./...
 	go tool cover -html=coverage.out
 
+test-integration:
+	./scripts/integration_test_runner.sh
+
+test-integration-ping:
+	ENVIRONMENT=test INTEGRATION_TEST=true go test -v -tags=integration ./internal/... -timeout=5m
+
+test-unit:
+	go test -v ./...
+
+test-all: test-unit test-integration
+
 # Database commands
 migrate-up:
 	go run main.go migrate up
