@@ -1,6 +1,10 @@
 package config
 
-import "time"
+import (
+	"time"
+
+	"github.com/spf13/viper"
+)
 
 type ServerConfig struct {
 	Port         int
@@ -12,8 +16,8 @@ var Server ServerConfig
 
 func initServerConfig() {
 	Server = ServerConfig{
-		Port:         mustGetInt("SERVER_PORT"),
-		ReadTimeout:  mustGetDurationMs("READ_TIMEOUT_MS"),
-		WriteTimeout: mustGetDurationMs("WRITE_TIMEOUT_MS"),
+		Port:         viper.GetInt("SERVER_PORT"),
+		ReadTimeout:  time.Duration(viper.GetDuration("READ_TIMEOUT_MS").Milliseconds()),
+		WriteTimeout: time.Duration(viper.GetDuration("WRITE_TIMEOUT_MS").Milliseconds()),
 	}
 }

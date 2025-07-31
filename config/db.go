@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"net/url"
 	"time"
+
+	"github.com/spf13/viper"
 )
 
 type DatabaseConfig struct {
@@ -25,16 +27,16 @@ var Database DatabaseConfig
 
 func initDatabaseConfig() {
 	Database = DatabaseConfig{
-		DriverName:            mustGetString("DB_DRIVER"),
-		Name:                  mustGetString("DB_NAME"),
-		Host:                  mustGetString("DB_HOST"),
-		User:                  mustGetString("DB_USER"),
-		Password:              mustGetString("DB_PASSWORD"),
-		Port:                  mustGetInt("DB_PORT"),
-		MaxPoolSize:           mustGetInt("DB_POOL_SIZE"),
-		ReadTimeout:           mustGetDurationMs("DB_READ_TIMEOUT_MS"),
-		WriteTimeout:          mustGetDurationMs("DB_WRITE_TIMEOUT_MS"),
-		ConnectionMaxLifeTime: mustGetDurationMinute("DB_CONNECTION_MAX_LIFETIME_MINUTE"),
+		DriverName:            viper.GetString("DB_DRIVER"),
+		Name:                  viper.GetString("DB_NAME"),
+		Host:                  viper.GetString("DB_HOST"),
+		User:                  viper.GetString("DB_USER"),
+		Password:              viper.GetString("DB_PASSWORD"),
+		Port:                  viper.GetInt("DB_PORT"),
+		MaxPoolSize:           viper.GetInt("DB_POOL_SIZE"),
+		ReadTimeout:           time.Duration(viper.GetDuration("DB_READ_TIMEOUT_MS").Milliseconds()),
+		WriteTimeout:          time.Duration(viper.GetDuration("DB_WRITE_TIMEOUT_MS").Milliseconds()),
+		ConnectionMaxLifeTime: time.Duration(viper.GetDuration("DB_CONNECTION_MAX_LIFETIME_MINUTE").Minutes()),
 	}
 }
 
