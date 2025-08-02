@@ -10,7 +10,7 @@ var ConfigLoadedForTest bool
 
 func Init() {
 	if os.Getenv("ENVIRONMENT") == "test" {
-		viper.SetConfigName("test")
+		viper.SetConfigName("test.application")
 	} else {
 		viper.SetConfigName("application")
 	}

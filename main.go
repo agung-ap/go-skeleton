@@ -8,6 +8,7 @@ import (
 	"go-skeleton/pkg/logger"
 	"os"
 
+	_ "github.com/lib/pq"
 	"github.com/urfave/cli/v2"
 	"go.uber.org/zap"
 )

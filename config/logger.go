@@ -3,13 +3,13 @@ package config
 import "github.com/spf13/viper"
 
 type LoggerConfig struct {
+	OutputPaths       []string `mapstructure:"LOG_OUTPUT_PATHS"`
+	ErrorOutputPaths  []string `mapstructure:"LOG_ERROR_OUTPUT_PATHS"`
 	Level             string   `mapstructure:"LOG_LEVEL"`
+	Encoding          string   `mapstructure:"LOG_ENCODING"`
 	Development       bool     `mapstructure:"LOG_DEVELOPMENT"`
 	DisableCaller     bool     `mapstructure:"LOG_DISABLE_CALLER"`
 	DisableStacktrace bool     `mapstructure:"LOG_DISABLE_STACKTRACE"`
-	Encoding          string   `mapstructure:"LOG_ENCODING"`
-	OutputPaths       []string `mapstructure:"LOG_OUTPUT_PATHS"`
-	ErrorOutputPaths  []string `mapstructure:"LOG_ERROR_OUTPUT_PATHS"`
 }
 
 var Logger LoggerConfig

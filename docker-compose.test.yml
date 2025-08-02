@@ -6,8 +6,10 @@ services:
       context: .
       dockerfile: ./Dockerfile.test
     ports: 
-      - 8080:8080
+      - 1996:1996
     restart: on-failure
+    environment:
+      - ENVIRONMENT=test
     volumes:
       - api_test:/usr/src/app/
     depends_on:
@@ -19,7 +21,7 @@ services:
   fullstack-redis-test:
     image: redis:alpine
     ports:
-      - 6379:6379
+      - 1997:1997
     container_name: redis-db-test
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
@@ -38,7 +40,7 @@ services:
       - ./create_test_db.sql:/docker-entrypoint-initdb.d/create_test_db.sql
       - postgres_test:/data/postgres
     ports:
-      - "5432:5432"
+      - "1998:1998"
     networks:
       - fullstack-test
     restart: unless-stopped

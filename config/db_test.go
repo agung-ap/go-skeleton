@@ -1,6 +1,7 @@
 package config
 
 import (
+	"os"
 	"testing"
 	"time"
 
@@ -37,6 +38,29 @@ func TestInitDatabaseConfig(t *testing.T) {
 	assert.Equal(t, time.Duration(1000)*time.Millisecond, Database.ReadTimeout)
 	assert.Equal(t, time.Duration(2000)*time.Millisecond, Database.WriteTimeout)
 	assert.Equal(t, time.Duration(30)*time.Minute, Database.ConnectionMaxLifeTime)
+}
+
+func TestInitDatabaseConfig_WithTestEnvironment(t *testing.T) {
+	// Skip this test if not in test environment
+	if os.Getenv("ENVIRONMENT") != "test" {
+		t.Skip("Skipping test environment test")
+	}
+
+	// Reset viper and load test configuration
+	viper.Reset()
+	t.Setenv("ENVIRONMENT", "test")
+	Init()
+
+	assert.Equal(t, "postgres", Database.DriverName)
+	assert.Equal(t, "test-db", Database.Name)
+	assert.Equal(t, "postgres-db-test", Database.Host)
+	assert.Equal(t, "postgres", Database.User)
+	assert.Equal(t, "postgres", Database.Password)
+	assert.Equal(t, 5432, Database.Port)
+	assert.Equal(t, 20, Database.MaxPoolSize)
+	assert.Equal(t, time.Duration(200)*time.Millisecond, Database.ReadTimeout)
+	assert.Equal(t, time.Duration(200)*time.Millisecond, Database.WriteTimeout)
+	assert.Equal(t, time.Duration(20)*time.Minute, Database.ConnectionMaxLifeTime)
 }
 
 func TestDatabaseConfig_ConnectionURL(t *testing.T) {

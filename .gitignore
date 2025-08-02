@@ -31,6 +31,8 @@ create_db.sql
 create_test_db.sql
 application.yml
 test.yml
+test.application.example.yml
+test.application.yml
 
 coverage/
 .cursor/
