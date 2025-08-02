@@ -2,8 +2,6 @@ module go-skeleton
 
 go 1.23.0
 
-toolchain go1.23.11
-
 require (
 	github.com/gin-gonic/gin v1.10.1
 	github.com/golang-migrate/migrate/v4 v4.18.3
@@ -14,8 +12,6 @@ require (
 	github.com/urfave/cli/v2 v2.27.7
 	go.uber.org/zap v1.27.0
 )
-
-require github.com/stretchr/objx v0.5.2 // indirect
 
 require (
 	github.com/bytedance/sonic v1.11.6 // indirect
