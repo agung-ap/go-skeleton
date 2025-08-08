@@ -2,32 +2,31 @@ package config
 
 import (
 	"os"
+	"strings"
 
 	"github.com/spf13/viper"
+	"github.com/subosito/gotenv"
 )
 
 var ConfigLoadedForTest bool
 
 func Init() {
-	if os.Getenv("ENVIRONMENT") == "test" {
-		viper.SetConfigName("test.application")
-	} else {
-		viper.SetConfigName("application")
+	// Determine the current environment. Default to "development" when not set.
+	env := os.Getenv("ENVIRONMENT")
+	if env == "" {
+		env = "development"
+		_ = os.Setenv("ENVIRONMENT", env)
 	}
 
-	viper.SetConfigType("yml")
-	viper.AddConfigPath("./")
-	viper.AddConfigPath("./../")
-	viper.AddConfigPath("./../../")
-	viper.AddConfigPath("./../../../")
-	// For docker only
-	viper.AddConfigPath("/app")
+	// Load the environment-specific .env file (e.g. env/development.env).
+	var b strings.Builder
+	b.WriteString("env/")
+	b.WriteString(env)
+	b.WriteString(".env")
 
-	err := viper.ReadInConfig()
-	if err != nil {
-		return
-	}
+	_ = gotenv.Load(b.String())
 
+	// Bind environment variables to Viper
 	viper.AutomaticEnv()
 
 	initAppConfig()

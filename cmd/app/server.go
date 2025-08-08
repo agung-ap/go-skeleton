@@ -2,12 +2,13 @@ package app
 
 import (
 	"context"
+	"errors"
+	"fmt"
 	"go-skeleton/config"
 	"go-skeleton/pkg/logger"
 	"net/http"
 	"os"
 	"os/signal"
-	"strconv"
 	"syscall"
 
 	"go.uber.org/zap"
@@ -22,7 +23,7 @@ func New() *Server {
 
 	server := &Server{
 		server: &http.Server{
-			Addr:         ":" + strconv.Itoa(config.Server.Port),
+			Addr:         fmt.Sprintf(":%d", config.Server.Port),
 			Handler:      handler,
 			ReadTimeout:  config.Server.ReadTimeout,
 			WriteTimeout: config.Server.WriteTimeout,
@@ -45,7 +46,7 @@ func (s *Server) Start(ctx context.Context, cancel context.CancelFunc) {
 
 	go func() {
 		err := s.server.ListenAndServe()
-		if err != nil && err != http.ErrServerClosed {
+		if err != nil && !errors.Is(err, http.ErrServerClosed) {
 			logger.Error("Server error", zap.Error(err))
 			cancel()
 		}

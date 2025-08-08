@@ -1,6 +1,10 @@
 package config
 
-import "github.com/spf13/viper"
+import (
+	"strings"
+
+	"github.com/spf13/viper"
+)
 
 type LoggerConfig struct {
 	OutputPaths       []string `mapstructure:"LOG_OUTPUT_PATHS"`
@@ -14,33 +18,79 @@ type LoggerConfig struct {
 
 var Logger LoggerConfig
 
+var (
+	defaultOutputPaths      = []string{"stdout"}
+	defaultErrorOutputPaths = []string{"stderr"}
+)
+
 func initLoggerConfig() {
-	Logger.Level = getStringOrDefault("LOG_LEVEL", "info")
-	Logger.Development = getBoolOrDefault("LOG_DEVELOPMENT", false)
-	Logger.DisableCaller = getBoolOrDefault("LOG_DISABLE_CALLER", false)
-	Logger.DisableStacktrace = getBoolOrDefault("LOG_DISABLE_STACKTRACE", false)
-	Logger.Encoding = getStringOrDefault("LOG_ENCODING", "json")
-	Logger.OutputPaths = getStringSliceOrDefault("LOG_OUTPUT_PATHS", []string{"stdout"})
-	Logger.ErrorOutputPaths = getStringSliceOrDefault("LOG_ERROR_OUTPUT_PATHS", []string{"stderr"})
-}
-
-func getStringOrDefault(key, defaultValue string) string {
-	if value := viper.GetString(key); value != "" {
-		return value
+	// LOG_LEVEL
+	level := viper.GetString("LOG_LEVEL")
+	if level == "" {
+		level = "info"
 	}
-	return defaultValue
-}
+	Logger.Level = level
 
-func getBoolOrDefault(key string, defaultValue bool) bool {
-	if value := viper.GetString(key); value != "" {
-		return value == "true"
+	// LOG_DEVELOPMENT
+	devStr := viper.GetString("LOG_DEVELOPMENT")
+	if devStr == "" {
+		Logger.Development = false
+	} else {
+		Logger.Development = devStr == "true"
 	}
-	return defaultValue
-}
 
-func getStringSliceOrDefault(key string, defaultValue []string) []string {
-	if value := viper.GetString(key); value != "" {
-		return []string{value}
+	// LOG_DISABLE_CALLER
+	disableCallerStr := viper.GetString("LOG_DISABLE_CALLER")
+	if disableCallerStr == "" {
+		Logger.DisableCaller = false
+	} else {
+		Logger.DisableCaller = disableCallerStr == "true"
 	}
-	return defaultValue
+
+	// LOG_DISABLE_STACKTRACE
+	disableStackStr := viper.GetString("LOG_DISABLE_STACKTRACE")
+	if disableStackStr == "" {
+		Logger.DisableStacktrace = false
+	} else {
+		Logger.DisableStacktrace = disableStackStr == "true"
+	}
+
+	// LOG_ENCODING
+	encoding := viper.GetString("LOG_ENCODING")
+	if encoding == "" {
+		encoding = "json"
+	}
+	Logger.Encoding = encoding
+
+	// LOG_OUTPUT_PATHS
+	outputPaths := viper.GetStringSlice("LOG_OUTPUT_PATHS")
+	if len(outputPaths) == 0 {
+		if s := viper.GetString("LOG_OUTPUT_PATHS"); s != "" {
+			parts := strings.Split(s, ",")
+			for i := range parts {
+				parts[i] = strings.TrimSpace(parts[i])
+			}
+			outputPaths = parts
+		}
+	}
+	if len(outputPaths) == 0 {
+		outputPaths = append([]string(nil), defaultOutputPaths...)
+	}
+	Logger.OutputPaths = outputPaths
+
+	// LOG_ERROR_OUTPUT_PATHS
+	errorOutputPaths := viper.GetStringSlice("LOG_ERROR_OUTPUT_PATHS")
+	if len(errorOutputPaths) == 0 {
+		if s := viper.GetString("LOG_ERROR_OUTPUT_PATHS"); s != "" {
+			parts := strings.Split(s, ",")
+			for i := range parts {
+				parts[i] = strings.TrimSpace(parts[i])
+			}
+			errorOutputPaths = parts
+		}
+	}
+	if len(errorOutputPaths) == 0 {
+		errorOutputPaths = append([]string(nil), defaultErrorOutputPaths...)
+	}
+	Logger.ErrorOutputPaths = errorOutputPaths
 }
