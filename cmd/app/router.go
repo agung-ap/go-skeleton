@@ -2,7 +2,6 @@ package app
 
 import (
 	"go-skeleton/config"
-	"go-skeleton/pkg/logger"
 
 	"github.com/gin-gonic/gin"
 )
@@ -16,11 +15,7 @@ func NewGlobalRouter() *gin.Engine {
 		gin.SetMode(gin.ReleaseMode)
 	}
 
-	router := gin.New()
-
-	// Add global middleware
-	router.Use(gin.Recovery())             // Equivalent to Chi's Recoverer
-	router.Use(logger.LoggingMiddleware()) // Our custom logging middleware
+	router := gin.Default()
 
 	// Static file serving for docs
 	router.Static("/docs", config.App.DocsPath)

@@ -1,9 +1,7 @@
 package logger
 
 import (
-	"fmt"
 	"go-skeleton/config"
-	"log"
 	"os"
 	"strings"
 
@@ -14,6 +12,9 @@ import (
 var (
 	globalLogger *zap.Logger
 	sugar        *zap.SugaredLogger
+	// Pre-created no-op loggers to avoid allocations on fallback
+	defaultNopLogger = zap.NewNop()
+	defaultNopSugar  = defaultNopLogger.Sugar()
 )
 
 // Init initializes the global logger with the provided configuration
@@ -49,9 +50,7 @@ func Init(logConfig config.LoggerConfig) {
 	core := zapcore.NewCore(encoder, writeSyncer, level)
 
 	// Create a logger with options
-	opts := []zap.Option{
-		zap.AddStacktrace(zapcore.ErrorLevel),
-	}
+	opts := []zap.Option{}
 
 	if !logConfig.DisableCaller {
 		opts = append(opts, zap.AddCaller())
@@ -72,8 +71,8 @@ func Init(logConfig config.LoggerConfig) {
 // GetLogger returns the global zap logger
 func GetLogger() *zap.Logger {
 	if globalLogger == nil {
-		// Fallback to nop logger if not initialized
-		return zap.NewNop()
+		// Fallback to cached nop logger to avoid heap allocations
+		return defaultNopLogger
 	}
 	return globalLogger
 }
@@ -81,8 +80,8 @@ func GetLogger() *zap.Logger {
 // GetSugar returns the global sugared logger
 func GetSugar() *zap.SugaredLogger {
 	if sugar == nil {
-		// Fallback to nop logger if not initialized
-		return zap.NewNop().Sugar()
+		// Fallback to cached nop sugar to avoid heap allocations
+		return defaultNopSugar
 	}
 	return sugar
 }
@@ -90,11 +89,9 @@ func GetSugar() *zap.SugaredLogger {
 // Sync flushes any buffered log entries
 func Sync() {
 	if globalLogger != nil {
-		if err := globalLogger.Sync(); err != nil {
-			log.Fatal(fmt.Errorf("failed to flushing log: %w", err))
-		}
+		// Ignore sync errors to prevent leaking environment specifics and avoid heap allocations from formatting
+		_ = globalLogger.Sync()
 	}
-	// no explicit return needed
 }
 
 // Info Convenience functions for common logging patterns
