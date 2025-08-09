@@ -50,7 +50,7 @@ func CloseMigrationDB() {
 	}
 }
 
-func InitMigration(cfg config.DatabaseConfig) (*MigrationManager, error) {
+func InitMigration(cfg config.DatabaseConfig) (MigrationManager, error) {
 	// Create a separate database connection specifically for migrations
 	// Build connection string for PostgreSQL
 	dsn := cfg.ConnectionURL()
@@ -58,7 +58,7 @@ func InitMigration(cfg config.DatabaseConfig) (*MigrationManager, error) {
 	// SQL connection for all operations
 	db, err := sqlx.Connect(cfg.DriverName, dsn)
 	if err != nil {
-		return nil, fmt.Errorf("failed to connect to database with sqlx: %w", err)
+		return MigrationManager{}, fmt.Errorf("failed to connect to database with sqlx: %w", err)
 	}
 
 	// DB pool configuration
